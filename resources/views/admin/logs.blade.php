@@ -22,51 +22,50 @@
 }" class="space-y-6">
 
     <!-- Page Title & Header -->
-    <div class="bg-slate-900/90 p-6 rounded-3xl border border-slate-800 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <div class="flex items-center gap-2">
-                <span class="px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 text-[11px] font-bold uppercase tracking-wider">Modul Admin</span>
-                <span class="text-slate-500">•</span>
-                <span class="text-xs text-slate-400 font-medium">Audit Trail System</span>
-            </div>
-            <h1 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">Aktivitas & Audit Log Realtime</h1>
-            <p class="text-xs text-slate-400 mt-1">Catatan riwayat aksi pengguna, perubahan data, dan pencatatan transaksi di seluruh platform.</p>
+            <h1 class="text-xl font-bold text-zinc-100 tracking-tight">Audit Trail & Activity Log</h1>
+            <p class="text-xs text-zinc-400 mt-0.5">Catatan riwayat aksi pengguna, perubahan data, dan transaksi di seluruh platform.</p>
+        </div>
+
+        <div class="px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 text-xs font-mono flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>Realtime Logging Active</span>
         </div>
     </div>
 
-    <!-- Audit Log Table & Search Bar -->
-    <div class="bg-slate-900/90 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-4">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
-            <div class="flex items-center gap-2 text-xs font-bold text-slate-300">
-                <i class="fa-solid fa-clock-rotate-left text-amber-400"></i>
-                <span>Log Aktivitas Realtime</span>
+    <!-- Audit Log Card -->
+    <div class="saas-card p-6 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-800/80">
+            <div class="relative w-full sm:w-64">
+                <i class="fa-solid fa-magnifying-glass text-xs text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                <input type="text" x-model="logSearch" placeholder="Cari aksi / user / IP..." class="saas-input w-full pl-9">
             </div>
-
-            <div class="relative w-64">
-                <i class="fa-solid fa-magnifying-glass text-xs text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
-                <input type="text" x-model="logSearch" placeholder="Cari aksi / user..." class="w-full bg-slate-800 text-white text-xs pl-9 pr-4 py-2 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-500">
-            </div>
+            
+            <span class="text-xs text-zinc-500 font-mono">Tercatat: <strong class="text-zinc-200" x-text="filteredLogs.length + ' Logs'"></strong></span>
         </div>
 
-        <div class="overflow-x-auto rounded-2xl border border-slate-800">
+        <div class="overflow-x-auto rounded-xl border border-zinc-800/80">
             <table class="w-full text-left border-collapse text-xs">
                 <thead>
-                    <tr class="bg-slate-950/80 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-800">
-                        <th class="py-3.5 px-4">Waktu</th>
-                        <th class="py-3.5 px-4">Pengguna (User)</th>
-                        <th class="py-3.5 px-4">Aksi / Event</th>
-                        <th class="py-3.5 px-4">Rincian Log</th>
-                        <th class="py-3.5 px-4">IP Address</th>
+                    <tr class="bg-zinc-950/80 text-[11px] font-semibold text-zinc-400 uppercase tracking-wider border-b border-zinc-800">
+                        <th class="py-3 px-4">Waktu</th>
+                        <th class="py-3 px-4">Pengguna</th>
+                        <th class="py-3 px-4">Event Aksi</th>
+                        <th class="py-3 px-4">Rincian Audit Log</th>
+                        <th class="py-3 px-4">IP Address</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-800/60">
+                <tbody class="divide-y divide-zinc-800/60 font-sans">
                     <template x-for="l in filteredLogs" :key="l.id">
-                        <tr class="hover:bg-slate-800/40 transition">
-                            <td class="py-3.5 px-4 font-mono text-slate-400 text-[11px]" x-text="l.time"></td>
-                            <td class="py-3.5 px-4 font-bold text-white" x-text="l.user"></td>
-                            <td class="py-3.5 px-4 font-semibold text-amber-300" x-text="l.action"></td>
-                            <td class="py-3.5 px-4 text-slate-300" x-text="l.details"></td>
-                            <td class="py-3.5 px-4 font-mono text-slate-500 text-[11px]" x-text="l.ip"></td>
+                        <tr class="hover:bg-zinc-900/40 transition">
+                            <td class="py-3 px-4 font-mono text-zinc-400 text-[11px]" x-text="l.time"></td>
+                            <td class="py-3 px-4 font-semibold text-zinc-200" x-text="l.user"></td>
+                            <td class="py-3 px-4">
+                                <span class="px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 text-amber-300 font-medium text-[11px]" x-text="l.action"></span>
+                            </td>
+                            <td class="py-3 px-4 text-zinc-300" x-text="l.details"></td>
+                            <td class="py-3 px-4 font-mono text-zinc-500 text-[11px]" x-text="l.ip"></td>
                         </tr>
                     </template>
                 </tbody>

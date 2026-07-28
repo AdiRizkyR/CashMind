@@ -11,6 +11,16 @@
         'Mei': { income: 2451319, expenses: 2398163, expected: 53156, missing: 43380 }
     },
 
+    categories: [
+        { name: 'Makanan', pct: 40, alokasi: 4383816, realisasi: 1129645, icon: 'fa-utensils' },
+        { name: 'Belanja', pct: 10, alokasi: 1095954, realisasi: 147300, icon: 'fa-bag-shopping' },
+        { name: 'Tabungan', pct: 0, alokasi: 0, realisasi: 4099765, icon: 'fa-piggy-bank' },
+        { name: 'Hiburan', pct: 8, alokasi: 876763, realisasi: 52500, icon: 'fa-gamepad' },
+        { name: 'Kendaraan', pct: 10, alokasi: 1095954, realisasi: 5000, icon: 'fa-motorcycle' },
+        { name: 'Admin', pct: 2, alokasi: 219191, realisasi: 19000, icon: 'fa-receipt' },
+        { name: 'Dana HP', pct: 15, alokasi: 1643931, realisasi: 5269620, icon: 'fa-mobile-screen' }
+    ],
+
     formatRp(val) {
         return 'Rp ' + Number(val).toLocaleString('id-ID');
     },
@@ -25,16 +35,16 @@
                     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul'],
                     datasets: [
                         {
-                            label: 'Pemasukan (Income)',
+                            label: 'Pemasukan',
                             data: [4035594, 2386962, 6210023, 2299497, 2451319, 2309776, 10959540],
-                            backgroundColor: 'rgba(16, 185, 129, 0.85)',
-                            borderRadius: 8
+                            backgroundColor: '#10b981',
+                            borderRadius: 4
                         },
                         {
-                            label: 'Pengeluaran (Realisasi)',
+                            label: 'Pengeluaran',
                             data: [3563655, 2173300, 5891300, 2124727, 2398163, 2179900, 10722830],
-                            backgroundColor: 'rgba(244, 63, 94, 0.85)',
-                            borderRadius: 8
+                            backgroundColor: '#f43f5e',
+                            borderRadius: 4
                         }
                     ]
                 },
@@ -42,11 +52,11 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { labels: { color: '#94a3b8', font: { family: 'Plus Jakarta Sans', size: 11 } } }
+                        legend: { labels: { color: '#a1a1aa', font: { family: 'Plus Jakarta Sans', size: 11 } } }
                     },
                     scales: {
-                        x: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } },
-                        y: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } }
+                        x: { ticks: { color: '#71717a' }, grid: { color: '#181926' } },
+                        y: { ticks: { color: '#71717a' }, grid: { color: '#181926' } }
                     }
                 }
             });
@@ -58,11 +68,11 @@
             new Chart(ctxPie, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Makanan (40%)', 'Belanja (10%)', 'Dana HP (15%)', 'Kendaraan (10%)', 'Dilla (10%)', 'Hiburan (8%)', 'Sosial (5%)', 'Admin (2%)'],
+                    labels: ['Makanan (40%)', 'Belanja (10%)', 'Dana HP (15%)', 'Kendaraan (10%)', 'Hiburan (8%)', 'Admin (2%)'],
                     datasets: [{
-                        data: [4383816, 1095954, 1643931, 1095954, 1095954, 876763, 547977, 219191],
+                        data: [4383816, 1095954, 1643931, 1095954, 876763, 219191],
                         backgroundColor: [
-                            '#10b981', '#0284c7', '#f43f5e', '#14b8a6', '#6366f1', '#8b5cf6', '#f59e0b', '#64748b'
+                            '#10b981', '#0284c7', '#f43f5e', '#14b8a6', '#8b5cf6', '#64748b'
                         ],
                         borderWidth: 0
                     }]
@@ -71,167 +81,185 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { position: 'bottom', labels: { color: '#94a3b8', font: { family: 'Plus Jakarta Sans', size: 10 } } }
+                        legend: { position: 'bottom', labels: { color: '#a1a1aa', font: { family: 'Plus Jakarta Sans', size: 10 } } }
                     }
                 }
             });
         }
     }
-}" x-init="$nextTick(() => initCharts())" class="space-y-8">
-    
-    <!-- Top Banner -->
-    <div class="bg-slate-900/90 p-6 sm:p-8 rounded-3xl border border-slate-800 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+}" x-init="$nextTick(() => initCharts())" class="space-y-6">
+
+    <!-- Header Section -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <div class="flex items-center gap-2">
-                <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-[11px] font-bold uppercase tracking-wider">Rekapitulasi Kas</span>
-                <span class="text-slate-500">•</span>
-                <span class="text-xs text-slate-400 font-medium">Bulan: Juli 2026</span>
-            </div>
-            <h1 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">Dashboard Rekap Pemasukan & Pengeluaran</h1>
-            <p class="text-xs text-slate-400 mt-1">Ringkasan grafik diagram arus kas mandiri per bulan, alokasi budget, dan penyesuaian selisih saldo.</p>
+            <h1 class="text-xl font-bold text-zinc-100 tracking-tight">Overview Keuangan</h1>
+            <p class="text-xs text-zinc-400 mt-0.5">Ringkasan arus kas, alokasi anggaran, dan status rekonsiliasi kas Anda.</p>
         </div>
 
         <div class="flex items-center gap-3">
-            <select x-model="selectedMonth" class="bg-slate-800 text-white text-xs font-bold px-4 py-2.5 rounded-xl border border-slate-700 focus:ring-2 focus:ring-emerald-500 cursor-pointer">
-                <option value="Juli">Bulan: Juli 2026</option>
-                <option value="Juni">Bulan: Juni 2026</option>
-                <option value="Mei">Bulan: Mei 2026</option>
+            <select x-model="selectedMonth" class="saas-input cursor-pointer font-semibold">
+                <option value="Juli">Juli 2026</option>
+                <option value="Juni">Juni 2026</option>
+                <option value="Mei">Mei 2026</option>
             </select>
+
+            <a href="{{ route('user.expenses') }}" class="saas-btn-primary flex items-center gap-1.5">
+                <i class="fa-solid fa-plus text-[10px]"></i>
+                <span>Catat Transaksi</span>
+            </a>
         </div>
     </div>
 
-    <!-- 4 Key Financial KPI Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <div class="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl">
-            <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Pemasukan</span>
-                <div class="w-10 h-10 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold">
+    <!-- 4 Key Metric Cards (Stripe Style) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <!-- Total Income -->
+        <div class="saas-card p-5 space-y-3">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-medium text-zinc-400">Total Pemasukan</span>
+                <span class="p-1.5 rounded-md bg-emerald-500/10 text-emerald-400 text-xs">
                     <i class="fa-solid fa-arrow-down-left"></i>
-                </div>
+                </span>
             </div>
-            <div class="text-2xl font-extrabold text-white" x-text="formatRp(monthlyData[selectedMonth] ? monthlyData[selectedMonth].income : 0)"></div>
-            <div class="mt-3 flex items-center justify-between text-[11px] text-slate-400 pt-3 border-t border-slate-800">
-                <span>Pemasukan Bulan Ini</span>
-                <a href="{{ route('user.income') }}" class="text-emerald-400 font-bold hover:underline">Kelola Income →</a>
+            <div class="text-2xl font-bold text-zinc-100 font-mono" x-text="formatRp(monthlyData[selectedMonth] ? monthlyData[selectedMonth].income : 0)"></div>
+            <div class="flex items-center justify-between text-[11px] text-zinc-500 pt-1">
+                <span>Pemasukan Terverifikasi</span>
+                <a href="{{ route('user.income') }}" class="text-emerald-400 font-medium hover:underline">Kelola →</a>
             </div>
         </div>
 
-        <div class="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl">
-            <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Pengeluaran</span>
-                <div class="w-10 h-10 rounded-2xl bg-rose-500/10 text-rose-400 flex items-center justify-center font-bold">
+        <!-- Total Realisasi -->
+        <div class="saas-card p-5 space-y-3">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-medium text-zinc-400">Total Pengeluaran</span>
+                <span class="p-1.5 rounded-md bg-rose-500/10 text-rose-400 text-xs">
                     <i class="fa-solid fa-arrow-up-right"></i>
-                </div>
+                </span>
             </div>
-            <div class="text-2xl font-extrabold text-white" x-text="formatRp(monthlyData[selectedMonth] ? monthlyData[selectedMonth].expenses : 0)"></div>
-            <div class="mt-3 flex items-center justify-between text-[11px] text-slate-400 pt-3 border-t border-slate-800">
-                <span>Pengeluaran Harian</span>
-                <a href="{{ route('user.expenses') }}" class="text-rose-400 font-bold hover:underline">Kelola Transaksi →</a>
+            <div class="text-2xl font-bold text-zinc-100 font-mono" x-text="formatRp(monthlyData[selectedMonth] ? monthlyData[selectedMonth].expenses : 0)"></div>
+            <div class="flex items-center justify-between text-[11px] text-zinc-500 pt-1">
+                <span>Realisasi Pengeluaran</span>
+                <a href="{{ route('user.expenses') }}" class="text-rose-400 font-medium hover:underline">Rincian →</a>
             </div>
         </div>
 
-        <div class="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl">
-            <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Saldo Seharusnya</span>
-                <div class="w-10 h-10 rounded-2xl bg-sky-500/10 text-sky-400 flex items-center justify-center font-bold">
+        <!-- Saldo Seharusnya -->
+        <div class="saas-card p-5 space-y-3">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-medium text-zinc-400">Saldo Seharusnya</span>
+                <span class="p-1.5 rounded-md bg-sky-500/10 text-sky-400 text-xs">
                     <i class="fa-solid fa-wallet"></i>
-                </div>
+                </span>
             </div>
-            <div class="text-2xl font-extrabold text-white" x-text="formatRp(monthlyData[selectedMonth] ? monthlyData[selectedMonth].expected : 0)"></div>
-            <div class="mt-3 text-[11px] text-sky-400 pt-3 border-t border-slate-800 font-semibold">
-                Sisa Kas Pemasukan - Pengeluaran
+            <div class="text-2xl font-bold text-zinc-100 font-mono" x-text="formatRp(monthlyData[selectedMonth] ? monthlyData[selectedMonth].expected : 0)"></div>
+            <div class="text-[11px] text-zinc-500 pt-1">
+                Kas Bersih Sisa (Income - Expense)
             </div>
         </div>
 
-        <div class="p-6 rounded-3xl bg-amber-500/10 border border-amber-500/30 shadow-xl">
-            <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">Status Missing Cash</span>
-                <div class="w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+        <!-- Missing Cash Status -->
+        <div class="saas-card p-5 space-y-3 border-amber-500/30 bg-amber-500/5">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-medium text-amber-400">Missing Cash Selisih</span>
+                <span class="p-1.5 rounded-md bg-amber-500/20 text-amber-400 text-xs">
                     <i class="fa-solid fa-triangle-exclamation"></i>
-                </div>
+                </span>
             </div>
-            <div class="text-2xl font-extrabold text-amber-300" x-text="formatRp(monthlyData[selectedMonth] ? monthlyData[selectedMonth].missing : 0)"></div>
-            <div class="mt-3 text-[11px] text-amber-400/90 pt-3 border-t border-amber-500/20 font-semibold">
-                Selisih Belum Ter-audit
+            <div class="text-2xl font-bold text-amber-300 font-mono" x-text="formatRp(monthlyData[selectedMonth] ? monthlyData[selectedMonth].missing : 0)"></div>
+            <div class="text-[11px] text-amber-400/80 pt-1">
+                Perlu Audit Rekonsiliasi Kas
             </div>
         </div>
     </div>
 
-    <!-- INTERACTIVE DIAGRAMS SECTION -->
+    <!-- Visual Charts Grid (Stripe / Vercel Analytics Aesthetic) -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        <!-- DIAGRAM 1: Bar Chart Trend Pemasukan vs Pengeluaran -->
-        <div class="lg:col-span-2 bg-slate-900/90 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-4">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <!-- Bar Chart: Trend Arus Kas -->
+        <div class="lg:col-span-2 saas-card p-6 space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-zinc-800/80">
                 <div>
-                    <h2 class="text-base font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-chart-column text-emerald-400"></i>
-                        <span>Diagram Trend Pemasukan vs Pengeluaran (2026)</span>
+                    <h2 class="text-sm font-semibold text-zinc-200 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-column text-emerald-400 text-xs"></i>
+                        <span>Tren Arus Kas Bulanan (2026)</span>
                     </h2>
-                    <p class="text-xs text-slate-400 mt-0.5">Perbandingan total pemasukan dan pengeluaran per bulan.</p>
+                    <p class="text-[11px] text-zinc-400 mt-0.5">Perbandingan pemasukan vs pengeluaran per bulan.</p>
                 </div>
-                <span class="px-3 py-1 rounded-xl bg-slate-800 text-emerald-400 text-xs font-bold">Chart.js</span>
+                <span class="px-2 py-0.5 rounded bg-zinc-800 text-zinc-400 text-[10px] font-mono">Chart.js</span>
             </div>
 
-            <!-- Canvas Chart Bar Container -->
-            <div class="h-64 relative">
+            <div class="h-60 relative">
                 <canvas id="chartIncomeExpense"></canvas>
             </div>
         </div>
 
-        <!-- DIAGRAM 2: Doughnut Chart Distribusi Budget per Kategori -->
-        <div class="bg-slate-900/90 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-4">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <!-- Doughnut Chart: Kategori -->
+        <div class="saas-card p-6 space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-zinc-800/80">
                 <div>
-                    <h2 class="text-base font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-chart-pie text-sky-400"></i>
-                        <span>Diagram Distribusi Budget Kategori</span>
+                    <h2 class="text-sm font-semibold text-zinc-200 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie text-sky-400 text-xs"></i>
+                        <span>Distribusi Budget Kategori</span>
                     </h2>
-                    <p class="text-xs text-slate-400 mt-0.5">Persentase alokasi per kategori.</p>
+                    <p class="text-[11px] text-zinc-400 mt-0.5">Persentase alokasi per kategori.</p>
                 </div>
-                <a href="{{ route('user.categories') }}" class="text-xs text-sky-400 font-bold hover:underline">Edit % →</a>
+                <a href="{{ route('user.categories') }}" class="text-[11px] text-sky-400 hover:underline">Kelola % →</a>
             </div>
 
-            <!-- Canvas Chart Pie Container -->
-            <div class="h-64 relative">
+            <div class="h-60 relative">
                 <canvas id="chartCategoryPie"></canvas>
             </div>
         </div>
     </div>
 
-    <!-- Quick Navigation Banner for User Actions -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <a href="{{ route('user.income') }}" class="p-5 rounded-3xl bg-slate-900/90 hover:bg-slate-850 border border-slate-800 transition space-y-2 group">
-            <div class="w-10 h-10 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-base group-hover:scale-110 transition-transform">
-                <i class="fa-solid fa-hand-holding-dollar"></i>
+    <!-- Category Budget Progress Section -->
+    <div class="saas-card p-6 space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-zinc-800/80">
+            <div>
+                <h2 class="text-sm font-semibold text-zinc-200 flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-emerald-400 text-xs"></i>
+                    <span>Progres Realisasi vs Target Budget Kategori (Juli 2026)</span>
+                </h2>
+                <p class="text-[11px] text-zinc-400 mt-0.5">Pemantauan konsumsi budget per kategori.</p>
             </div>
-            <h3 class="font-bold text-white text-sm">Catat Pemasukan</h3>
-            <p class="text-[11px] text-slate-400">Gaji, Side Job, & Tabungan</p>
-        </a>
+            <a href="{{ route('user.categories') }}" class="saas-btn-secondary">Atur Kategori & Budget</a>
+        </div>
 
-        <a href="{{ route('user.expenses') }}" class="p-5 rounded-3xl bg-slate-900/90 hover:bg-slate-850 border border-slate-800 transition space-y-2 group">
-            <div class="w-10 h-10 rounded-2xl bg-rose-500/10 text-rose-400 flex items-center justify-center font-bold text-base group-hover:scale-110 transition-transform">
-                <i class="fa-solid fa-receipt"></i>
-            </div>
-            <h3 class="font-bold text-white text-sm">Catat Pengeluaran</h3>
-            <p class="text-[11px] text-slate-400">Pengeluaran Cash & Bank</p>
-        </a>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <template x-for="c in categories" :key="c.name">
+                <div class="p-4 rounded-xl bg-zinc-950/60 border border-zinc-800/80 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <div class="w-7 h-7 rounded-lg bg-zinc-900 border border-zinc-800 text-emerald-400 flex items-center justify-center text-xs">
+                                <i :class="'fa-solid ' + c.icon"></i>
+                            </div>
+                            <span class="text-xs font-semibold text-zinc-200" x-text="c.name"></span>
+                        </div>
+                        <span class="text-[11px] font-mono text-zinc-400" x-text="'Target: ' + c.pct + '%'"></span>
+                    </div>
 
-        <a href="{{ route('user.categories') }}" class="p-5 rounded-3xl bg-slate-900/90 hover:bg-slate-850 border border-slate-800 transition space-y-2 group">
-            <div class="w-10 h-10 rounded-2xl bg-sky-500/10 text-sky-400 flex items-center justify-center font-bold text-base group-hover:scale-110 transition-transform">
-                <i class="fa-solid fa-sliders"></i>
-            </div>
-            <h3 class="font-bold text-white text-sm">Atur Kategori & %</h3>
-            <p class="text-[11px] text-slate-400">Persentase Target Budget</p>
-        </a>
+                    <div class="space-y-1">
+                        <div class="flex justify-between text-[11px]">
+                            <span class="text-zinc-400">Realisasi: <strong class="text-zinc-200" x-text="formatRp(c.realisasi)"></strong></span>
+                            <span class="text-zinc-400">Target: <strong class="text-zinc-300" x-text="formatRp(c.alokasi)"></strong></span>
+                        </div>
+                        
+                        <div class="w-full h-1.5 rounded-full bg-zinc-800 overflow-hidden relative">
+                            <div class="h-full rounded-full transition-all duration-300"
+                                 :class="c.realisasi > c.alokasi && c.alokasi > 0 ? 'bg-rose-500' : 'bg-emerald-500'"
+                                 :style="'width: ' + Math.min((c.realisasi / (c.alokasi || 1)) * 100, 100) + '%'">
+                            </div>
+                        </div>
 
-        <a href="{{ route('user.reports') }}" class="p-5 rounded-3xl bg-slate-900/90 hover:bg-slate-850 border border-slate-800 transition space-y-2 group">
-            <div class="w-10 h-10 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-base group-hover:scale-110 transition-transform">
-                <i class="fa-solid fa-file-invoice-dollar"></i>
-            </div>
-            <h3 class="font-bold text-white text-sm">Cetak Laporan PDF</h3>
-            <p class="text-[11px] text-slate-400">Laporan Per Bulan/Tahun</p>
-        </a>
+                        <div class="flex justify-between text-[10px] pt-0.5">
+                            <span x-text="c.alokasi > 0 ? ((c.realisasi / c.alokasi) * 100).toFixed(1) + '% Terpakai' : 'Pengeluaran Langsung'" class="text-zinc-500"></span>
+                            <span x-text="c.alokasi - c.realisasi >= 0 ? 'Sisa ' + formatRp(c.alokasi - c.realisasi) : 'Defisit ' + formatRp(c.realisasi - c.alokasi)"
+                                  :class="c.alokasi - c.realisasi < 0 ? 'text-rose-400 font-semibold' : 'text-emerald-400'"></span>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
     </div>
 </div>
 @endsection

@@ -1,28 +1,29 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-[#0b0f19] text-slate-100">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-[#09090b] text-zinc-100 antialiased">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $title ?? 'CashMind - Masuk & Daftar' }}</title>
+    <title>{{ $title ?? 'CashMind — Sign In' }}</title>
 
-    <!-- Google Fonts: Plus Jakarta Sans & Figtree -->
+    <!-- Google Fonts: Plus Jakarta Sans & Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- FontAwesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <!-- Tailwind CSS & Alpine.js CDN -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'Figtree', 'sans-serif'],
+                        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
                     },
                 }
             }
@@ -30,34 +31,29 @@
     </script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body class="h-full bg-[#0b0f19] text-slate-100 font-sans antialiased selection:bg-emerald-500 selection:text-white">
-    <div class="min-h-screen flex flex-col justify-center items-center p-4 relative overflow-hidden">
-        <!-- Glow Decorative Background Elements -->
-        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
+<body class="h-full bg-[#09090b] text-zinc-100 font-sans antialiased selection:bg-emerald-500 selection:text-zinc-950">
+    <div class="min-h-screen flex flex-col justify-center items-center p-4 relative">
+        
         <!-- Logo Header -->
         <div class="mb-6 text-center">
-            <a href="{{ url('/') }}" class="inline-flex items-center gap-3 group">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform duration-200">
-                    <i class="fa-solid fa-wallet text-slate-950 text-2xl font-bold"></i>
+            <a href="{{ url('/') }}" class="inline-flex items-center gap-2.5 group">
+                <div class="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-base group-hover:scale-105 transition-transform">
+                    <i class="fa-solid fa-wallet"></i>
                 </div>
-                <div class="flex flex-col text-left">
-                    <span class="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-200 to-emerald-400 bg-clip-text text-transparent">CashMind</span>
-                    <span class="text-[10px] font-medium text-slate-400 uppercase tracking-widest -mt-1">Keuangan 2026</span>
-                </div>
+                <span class="text-xl font-extrabold tracking-tight text-zinc-100">CashMind</span>
             </a>
         </div>
 
-        <!-- Guest Card Body -->
-        <div class="w-full sm:max-w-md bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-xl relative z-10">
+        <!-- Guest Card Shell -->
+        <div class="w-full sm:max-w-sm bg-[#12131c] border border-zinc-800/80 rounded-2xl p-6 shadow-2xl backdrop-blur-xl relative z-10">
             {{ $slot }}
         </div>
 
         <!-- Back to Landing Link -->
         <div class="mt-6 text-center">
-            <a href="{{ url('/') }}" class="text-xs text-slate-400 hover:text-emerald-400 transition flex items-center gap-1.5 justify-center">
-                <i class="fa-solid fa-arrow-left"></i>
-                <span>Kembali ke Landing Page</span>
+            <a href="{{ url('/') }}" class="text-xs text-zinc-500 hover:text-zinc-300 transition flex items-center gap-1.5 justify-center">
+                <i class="fa-solid fa-arrow-left text-[10px]"></i>
+                <span>Kembali ke Halaman Utama</span>
             </a>
         </div>
     </div>
