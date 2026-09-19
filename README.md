@@ -297,4 +297,4 @@ CashMind/
 
 Proyek ini dilisensikan di bawah **[MIT License](LICENSE)**.
 
-Dibuat & Dikembangkan oleh **Aditya Personal / CashMind Development Team 2026**.
+Dibuat & Dikembangkan oleh **Adi Rizky Ramadhan** © 2026. Hak Cipta Dilindungi.
