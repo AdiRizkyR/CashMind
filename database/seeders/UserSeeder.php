@@ -17,9 +17,10 @@ class UserSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'admin@cashmind.id'],
             [
-                'name' => 'Super Admin CashMind',
+                'name' => 'System Admin',
                 'password' => Hash::make('password'),
                 'role' => 'admin',
+                'status' => 'active',
                 'email_verified_at' => now(),
             ]
         );
@@ -31,6 +32,7 @@ class UserSeeder extends Seeder
                 'name' => 'Aditya Personal',
                 'password' => Hash::make('password'),
                 'role' => 'user',
+                'status' => 'active',
                 'email_verified_at' => now(),
             ]
         );

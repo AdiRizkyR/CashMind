@@ -1,213 +1,192 @@
 @extends('layouts.user')
 
-@section('user-content')
-<!-- Komentar Bahasa Indonesia: Modul Laporan Keuangan Siap Cetak (PDF/Print) Tema Terang -->
-<div x-data="{
-    reportType: 'monthly',
+@section('content')
+<div class="space-y-6">
 
-    categories: [
-        { name: 'Makanan', pct: 40, alokasi: 4383816, realisasi: 1129645 },
-        { name: 'Belanja', pct: 10, alokasi: 1095954, realisasi: 147300 },
-        { name: 'Tabungan', pct: 0, alokasi: 0, realisasi: 4099765 },
-        { name: 'Hiburan', pct: 8, alokasi: 876763, realisasi: 52500 },
-        { name: 'Kendaraan', pct: 10, alokasi: 1095954, realisasi: 5000 },
-        { name: 'Admin', pct: 2, alokasi: 219191, realisasi: 19000 },
-        { name: 'Dana HP', pct: 15, alokasi: 1643931, realisasi: 5269620 },
-        { name: 'Sosial', pct: 5, alokasi: 547977, realisasi: 0 }
-    ],
-
-    transactions: [
-        { id: 1, date: '15 Juli 2026', type: 'Transfer', uraian: 'Pembelian Gadget / HP Baru', rincian: 'Dp Unit HP', kategori: 'Dana HP', bank: 'BNI', amount: 5269620 },
-        { id: 2, date: '14 Juli 2026', type: 'Transfer', uraian: 'Setor Emas Digital & Tabungan', rincian: 'DANA Emas', kategori: 'Tabungan', bank: 'DANA', amount: 4099765 },
-        { id: 3, date: '12 Juli 2026', type: 'Cash', uraian: 'Belanja Bahan Makanan & Resto', rincian: 'Makan Mingguan', kategori: 'Makanan', bank: 'Cash', amount: 1129645 },
-        { id: 4, date: '10 Juli 2026', type: 'Cash', uraian: 'Vape Cartridge & Sabun', rincian: 'Kebutuhan Harian', kategori: 'Belanja', bank: 'Cash', amount: 147300 },
-        { id: 5, date: '08 Juli 2026', type: 'Transfer', uraian: 'Paket Data Internet & Game', rincian: 'WiFi & Game', kategori: 'Hiburan', bank: 'BNI', amount: 52500 },
-        { id: 6, date: '05 Juli 2026', type: 'Transfer', uraian: 'Biaya Admin Bulanan Bank', rincian: 'Admin BNI', kategori: 'Admin', bank: 'BNI', amount: 19000 },
-        { id: 7, date: '02 Juli 2026', type: 'Cash', uraian: 'Bensin Motor', rincian: 'Pertalite', kategori: 'Kendaraan', bank: 'Cash', amount: 5000 }
-    ],
-
-    annualSummary: [
-        { month: 'Januari', income: 4035594, expenses: 3563655, expected: 471939, actual: 386962, missing: 84977 },
-        { month: 'Februari', income: 2386962, expenses: 2173300, expected: 213662, actual: 155528, missing: 58134 },
-        { month: 'Maret', income: 6210023, expenses: 5891300, expected: 318723, actual: 299497, missing: 19226 },
-        { month: 'April', income: 2299497, expenses: 2124727, expected: 174770, actual: 151319, missing: 23451 },
-        { month: 'Mei', income: 2451319, expenses: 2398163, expected: 53156, actual: 9776, missing: 43380 },
-        { month: 'Juni', income: 2309776, expenses: 2179900, expected: 129876, actual: 116775, missing: 13101 },
-        { month: 'Juli', income: 10959540, expenses: 10722830, expected: 236710, actual: 0, missing: 236710 }
-    ],
-
-    formatRp(val) {
-        return 'Rp ' + Number(val).toLocaleString('id-ID');
-    },
-
-    printReport() {
-        window.print();
-    }
-}" class="space-y-6">
-
-    <!-- Controls Bar (Hidden on Print) -->
+    <!-- PAGE HEADER & EXPORT ACTIONS (Guideline Section 70) -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 print:hidden">
         <div>
-            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Cetak Laporan Keuangan</h1>
-            <p class="text-xs text-slate-500 mt-1">Cetak statement pendapatan, pengeluaran, dan audit selisih kas resmi.</p>
+            <h1 class="text-2xl font-extrabold text-[#0F172A] tracking-tight">Laporan Keuangan Pribadi</h1>
+            <p class="text-[#667085] text-xs font-medium mt-1">Ringkasan evaluasi arus kas dan rincian transaksi per periode.</p>
         </div>
 
         <div class="flex items-center gap-3">
-            <div class="flex items-center bg-slate-200/80 p-1 rounded-xl text-xs font-bold">
-                <button @click="reportType = 'monthly'" :class="reportType === 'monthly' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'" class="px-3.5 py-1.5 rounded-lg transition">
-                    Per Bulan (Juli)
-                </button>
-                <button @click="reportType = 'annual'" :class="reportType === 'annual' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'" class="px-3.5 py-1.5 rounded-lg transition">
-                    Per Tahun (2026)
-                </button>
-            </div>
+            <button onclick="window.print()" class="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-[#344054] bg-white border border-[#D0D5DD] hover:bg-[#F9FAFB] rounded-xl transition">
+                <svg class="w-4 h-4 text-[#667085]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+                </svg>
+                <span>Cetak / PDF</span>
+            </button>
+            <a href="{{ route('user.reports.csv', ['month' => $month, 'year' => $year]) }}" class="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-[#0F172A] hover:bg-[#1E293B] rounded-xl shadow-xs transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                <span>Ekspor CSV</span>
+            </a>
+        </div>
+    </div>
 
-            <button @click="printReport()" class="light-btn-primary">
-                <i class="fa-solid fa-print text-xs"></i>
-                <span>Cetak Laporan PDF</span>
+    <!-- FILTER BAR (Print Hidden) -->
+    <form method="GET" action="{{ route('user.reports.index') }}" class="cm-panel p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 print:hidden">
+        <div>
+            <label class="block text-[10px] font-bold uppercase text-[#667085] mb-1">Bulan</label>
+            <select name="month" class="w-full h-10 px-3 rounded-xl border border-[#D0D5DD] text-[#101828] text-xs font-semibold focus:border-[#0F766E] focus:ring-2 focus:ring-[#0F766E]/10 transition">
+                @for($m = 1; $m <= 12; $m++)
+                    <option value="{{ $m }}" {{ $month == $m ? 'selected' : '' }}>
+                        {{ \Carbon\Carbon::create(null, $m, 1)->translatedFormat('F') }}
+                    </option>
+                @endfor
+            </select>
+        </div>
+
+        <div>
+            <label class="block text-[10px] font-bold uppercase text-[#667085] mb-1">Tahun</label>
+            <select name="year" class="w-full h-10 px-3 rounded-xl border border-[#D0D5DD] text-[#101828] text-xs font-semibold focus:border-[#0F766E] focus:ring-2 focus:ring-[#0F766E]/10 transition">
+                @for($y = 2024; $y <= 2028; $y++)
+                    <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
+                @endfor
+            </select>
+        </div>
+
+        <div>
+            <label class="block text-[10px] font-bold uppercase text-[#667085] mb-1">Filter Akun</label>
+            <select name="account_id" class="w-full h-10 px-3 rounded-xl border border-[#D0D5DD] text-[#101828] text-xs font-semibold focus:border-[#0F766E] focus:ring-2 focus:ring-[#0F766E]/10 transition">
+                <option value="">Semua Akun</option>
+                @foreach($accounts as $acc)
+                    <option value="{{ $acc->id }}" {{ $accountId == $acc->id ? 'selected' : '' }}>{{ $acc->name }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="flex items-end">
+            <button type="submit" class="inline-flex items-center justify-center gap-2 h-10 px-4 w-full text-xs font-semibold text-white bg-[#0F172A] hover:bg-[#1E293B] rounded-xl shadow-xs transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+                </svg>
+                <span>Tampilkan Laporan</span>
             </button>
         </div>
-    </div>
+    </form>
 
-    <!-- PRINTABLE STATEMENT CONTAINER -->
-    <div class="light-card p-6 sm:p-8 space-y-8 print:bg-white print:text-black print:border-none print:shadow-none print:p-0">
+    <!-- PRINTABLE REPORT DOCUMENT CONTAINER -->
+    <div class="cm-panel p-6 md:p-8 space-y-8 bg-white print:border-none print:shadow-none print:p-0">
         
-        <!-- Formal Report Header -->
-        <div class="border-b border-slate-200 pb-6 print:border-black flex justify-between items-start">
+        <!-- REPORT HEADER BRANDING -->
+        <div class="border-b border-[#EAECF0] pb-6 flex items-center justify-between">
             <div>
-                <div class="text-[11px] font-mono font-bold text-emerald-700 uppercase">CASHMIND FINANCIAL STATEMENT</div>
-                <h1 class="text-xl font-bold text-slate-900 print:text-black mt-1" x-text="reportType === 'monthly' ? 'LAPORAN PENDAPATAN & PENGELUARAN (JULI 2026)' : 'LAPORAN REKAPITULASI KEUANGAN TAHUNAN (2026)'"></h1>
-                <p class="text-xs text-slate-500 print:text-zinc-600 mt-1">Dicetak pada: 28 Juli 2026 | Pemilik Akun: {{ Auth::user()->name ?? 'Aditya Personal' }}</p>
-            </div>
-
-            <div class="text-right">
-                <span class="inline-block px-3 py-1 rounded-lg bg-slate-100 border border-slate-200 text-slate-800 font-mono font-bold text-xs" x-text="reportType === 'monthly' ? 'Periode: Juli 2026' : 'Periode: Tahun 2026'"></span>
-            </div>
-        </div>
-
-        <!-- REPORT MODE 1: MONTHLY REPORT -->
-        <div x-show="reportType === 'monthly'" class="space-y-6">
-            <div class="grid grid-cols-4 gap-4 text-xs">
-                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 print:border-black print:bg-gray-50">
-                    <span class="text-slate-500 block text-[11px] font-bold">Total Pendapatan</span>
-                    <strong class="text-slate-900 print:text-black text-sm font-extrabold font-mono">Rp 10.959.540</strong>
-                </div>
-                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 print:border-black print:bg-gray-50">
-                    <span class="text-slate-500 block text-[11px] font-bold">Total Pengeluaran</span>
-                    <strong class="text-slate-900 print:text-black text-sm font-extrabold font-mono">Rp 10.722.830</strong>
-                </div>
-                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 print:border-black print:bg-gray-50">
-                    <span class="text-slate-500 block text-[11px] font-bold">Saldo Seharusnya</span>
-                    <strong class="text-slate-900 print:text-black text-sm font-extrabold font-mono">Rp 236.710</strong>
-                </div>
-                <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 print:border-black print:bg-gray-50">
-                    <span class="text-amber-800 block text-[11px] font-bold">Missing Cash Selisih</span>
-                    <strong class="text-amber-900 print:text-black text-sm font-extrabold font-mono">Rp 236.710</strong>
-                </div>
-            </div>
-
-            <div>
-                <h3 class="text-xs font-bold text-slate-800 print:text-black uppercase font-mono mb-3">1. Rekapitulasi Alokasi per Kategori</h3>
-                <table class="w-full text-left border-collapse text-xs print:border print:border-black">
-                    <thead>
-                        <tr class="bg-slate-100 print:bg-gray-100 text-slate-600 print:text-black font-bold text-[10px] uppercase border-b border-slate-200 print:border-black">
-                            <th class="py-2.5 px-3">Kategori</th>
-                            <th class="py-2.5 px-3">Target (%)</th>
-                            <th class="py-2.5 px-3">Target Alokasi (Rp)</th>
-                            <th class="py-2.5 px-3">Realisasi (Rp)</th>
-                            <th class="py-2.5 px-3 text-right">Status Selisih</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-200 print:divide-black">
-                        <template x-for="c in categories" :key="c.name">
-                            <tr class="print:border-b print:border-black">
-                                <td class="py-2.5 px-3 font-bold text-slate-900 print:text-black" x-text="c.name"></td>
-                                <td class="py-2.5 px-3 font-mono font-semibold text-slate-600 print:text-black" x-text="c.pct + '%'"></td>
-                                <td class="py-2.5 px-3 font-mono font-semibold text-slate-700 print:text-black" x-text="formatRp(c.alokasi)"></td>
-                                <td class="py-2.5 px-3 font-mono text-emerald-700 print:text-black font-extrabold" x-text="formatRp(c.realisasi)"></td>
-                                <td class="py-2.5 px-3 text-right font-mono font-bold" :class="c.alokasi - c.realisasi < 0 ? 'text-rose-600 print:text-black' : 'text-slate-600 print:text-black'" x-text="c.alokasi - c.realisasi >= 0 ? 'Sisa ' + formatRp(c.alokasi - c.realisasi) : 'Defisit ' + formatRp(c.realisasi - c.alokasi)"></td>
-                            </tr>
-                        </template>
-                    </tbody>
-                </table>
-            </div>
-
-            <div>
-                <h3 class="text-xs font-bold text-slate-800 print:text-black uppercase font-mono mb-3">2. Rincian Transaksi Pengeluaran Harian</h3>
-                <table class="w-full text-left border-collapse text-xs print:border print:border-black">
-                    <thead>
-                        <tr class="bg-slate-100 print:bg-gray-100 text-slate-600 print:text-black font-bold text-[10px] uppercase border-b border-slate-200 print:border-black">
-                            <th class="py-2.5 px-3">Tanggal</th>
-                            <th class="py-2.5 px-3">Tipe</th>
-                            <th class="py-2.5 px-3">Uraian & Rincian</th>
-                            <th class="py-2.5 px-3">Kategori</th>
-                            <th class="py-2.5 px-3">Bank/Akun</th>
-                            <th class="py-2.5 px-3 text-right">Nilai (Rp)</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-200 print:divide-black">
-                        <template x-for="t in transactions" :key="t.id">
-                            <tr class="print:border-b print:border-black">
-                                <td class="py-2.5 px-3 font-medium text-slate-800 print:text-black" x-text="t.date"></td>
-                                <td class="py-2.5 px-3 font-mono font-semibold text-slate-600 print:text-black text-[11px]" x-text="t.type"></td>
-                                <td class="py-2.5 px-3">
-                                    <div class="font-bold text-slate-900 print:text-black" x-text="t.uraian"></div>
-                                    <div class="text-[10px] text-slate-500 print:text-zinc-600 font-medium" x-text="t.rincian"></div>
-                                </td>
-                                <td class="py-2.5 px-3 font-semibold text-slate-800 print:text-black" x-text="t.kategori"></td>
-                                <td class="py-2.5 px-3 font-semibold text-slate-800 print:text-black" x-text="t.bank"></td>
-                                <td class="py-2.5 px-3 text-right font-mono font-extrabold text-rose-600 print:text-black" x-text="formatRp(t.amount)"></td>
-                            </tr>
-                        </template>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- REPORT MODE 2: ANNUAL 2026 SUMMARY REPORT -->
-        <div x-show="reportType === 'annual'" class="space-y-6">
-            <div>
-                <h3 class="text-xs font-bold text-slate-800 print:text-black uppercase font-mono mb-3">Rekapitulasi Arus Kas 12 Bulan (Tahun 2026)</h3>
-                <table class="w-full text-left border-collapse text-xs print:border print:border-black">
-                    <thead>
-                        <tr class="bg-slate-100 print:bg-gray-100 text-slate-600 print:text-black font-bold text-[10px] uppercase border-b border-slate-200 print:border-black">
-                            <th class="py-2.5 px-3">Bulan</th>
-                            <th class="py-2.5 px-3 text-right">Total Pemasukan</th>
-                            <th class="py-2.5 px-3 text-right">Total Pengeluaran</th>
-                            <th class="py-2.5 px-3 text-right">Saldo Seharusnya</th>
-                            <th class="py-2.5 px-3 text-right">Saldo Real Nyata</th>
-                            <th class="py-2.5 px-3 text-right">Selisih/Missing (Rp)</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-200 print:divide-black">
-                        <template x-for="a in annualSummary" :key="a.month">
-                            <tr class="print:border-b print:border-black">
-                                <td class="py-2.5 px-3 font-bold text-slate-900 print:text-black" x-text="a.month"></td>
-                                <td class="py-2.5 px-3 text-right font-mono text-emerald-700 print:text-black font-bold" x-text="a.income > 0 ? formatRp(a.income) : '-'"></td>
-                                <td class="py-2.5 px-3 text-right font-mono text-rose-600 print:text-black font-bold" x-text="a.expenses > 0 ? formatRp(a.expenses) : '-'"></td>
-                                <td class="py-2.5 px-3 text-right font-mono text-slate-800 print:text-black font-bold" x-text="a.expected > 0 ? formatRp(a.expected) : '-'"></td>
-                                <td class="py-2.5 px-3 text-right font-mono text-slate-800 print:text-black font-bold" x-text="a.actual > 0 ? formatRp(a.actual) : '-'"></td>
-                                <td class="py-2.5 px-3 text-right font-mono text-amber-700 print:text-black font-bold" x-text="a.missing > 0 ? formatRp(a.missing) : '-'"></td>
-                            </tr>
-                        </template>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Formal Signatures Footer on Print -->
-        <div class="hidden print:flex justify-between items-end pt-12 text-xs text-black">
-            <div>
-                <div>Mengetahui,</div>
-                <div class="mt-12 font-bold underline">{{ Auth::user()->name ?? 'Aditya Personal' }}</div>
-                <div>Pemilik Akun CashMind</div>
+                <h2 class="text-xl font-extrabold text-[#0F172A]">Laporan Keuangan Personal</h2>
+                <p class="text-xs text-[#667085] font-semibold mt-1">
+                    Periode: {{ \Carbon\Carbon::create(null, $month, 1)->translatedFormat('F') }} {{ $year }}
+                </p>
             </div>
             <div class="text-right">
-                <div>Tanggal Cetak: 28 Juli 2026</div>
-                <div class="mt-12 font-bold underline">CashMind System 2026</div>
-                <div>Sistem Rekonsiliasi Otomatis</div>
+                <span class="text-lg font-extrabold text-[#0F766E] block">CashMind</span>
+                <span class="text-[10px] text-[#98A2B3] font-medium block">Dicetak: {{ \Carbon\Carbon::now()->translatedFormat('d M Y H:i') }}</span>
             </div>
         </div>
+
+        <!-- 1. FINANCIAL SUMMARY METRICS (Guideline Section 70) -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="p-4 rounded-xl bg-[#F0FDF4] border border-[#DCFCE7]">
+                <span class="text-[10px] font-bold uppercase text-[#15803D] block">Total Pemasukan</span>
+                <div class="text-lg font-extrabold text-[#15803D] financial-number mt-1">
+                    + Rp {{ number_format($totalIncome, 0, ',', '.') }}
+                </div>
+            </div>
+            <div class="p-4 rounded-xl bg-[#FEF3F2] border border-[#FEE4E2]">
+                <span class="text-[10px] font-bold uppercase text-[#B42318] block">Total Pengeluaran</span>
+                <div class="text-lg font-extrabold text-[#B42318] financial-number mt-1">
+                    - Rp {{ number_format($totalExpense, 0, ',', '.') }}
+                </div>
+            </div>
+            <div class="p-4 rounded-xl bg-[#F8FAFB] border border-[#E4E7EC]">
+                <span class="text-[10px] font-bold uppercase text-[#667085] block">Net Cash Flow</span>
+                <div class="text-lg font-extrabold {{ $netCashFlow >= 0 ? 'text-[#15803D]' : 'text-[#B42318]' }} financial-number mt-1">
+                    {{ $netCashFlow >= 0 ? '+' : '' }} Rp {{ number_format($netCashFlow, 0, ',', '.') }}
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. BREAKDOWN TABLES (Income & Expense) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Income Breakdown -->
+            <div class="space-y-3">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-[#667085] border-b border-[#EAECF0] pb-2">Rincian Pemasukan per Kategori</h3>
+                <table class="w-full text-left text-xs border-collapse">
+                    <tbody class="divide-y divide-[#EAECF0]">
+                        @forelse($incomeBreakdown as $ib)
+                            <tr>
+                                <td class="py-2.5 text-[#344054] font-medium">{{ $ib['category'] }}</td>
+                                <td class="py-2.5 text-right financial-number font-bold text-[#15803D]">Rp {{ number_format($ib['total'], 0, ',', '.') }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="2" class="py-3 text-[#98A2B3] text-center">Tidak ada data pemasukan</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Expense Breakdown -->
+            <div class="space-y-3">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-[#667085] border-b border-[#EAECF0] pb-2">Rincian Pengeluaran per Kategori</h3>
+                <table class="w-full text-left text-xs border-collapse">
+                    <tbody class="divide-y divide-[#EAECF0]">
+                        @forelse($expenseBreakdown as $eb)
+                            <tr>
+                                <td class="py-2.5 text-[#344054] font-medium">{{ $eb['category'] }}</td>
+                                <td class="py-2.5 text-right financial-number font-bold text-[#B42318]">Rp {{ number_format($eb['total'], 0, ',', '.') }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="2" class="py-3 text-[#98A2B3] text-center">Tidak ada data pengeluaran</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 3. TRANSACTION DETAILS TABLE -->
+        <div class="space-y-3 pt-4">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-[#667085] border-b border-[#EAECF0] pb-2">Rincian Transaksi</h3>
+
+            <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                    <tr class="border-b border-[#E4E7EC] bg-[#F8FAFB] text-[10px] font-bold uppercase tracking-wider text-[#475467]">
+                        <th class="py-2.5 px-3">Tanggal</th>
+                        <th class="py-2.5 px-3">Jenis</th>
+                        <th class="py-2.5 px-3">Akun</th>
+                        <th class="py-2.5 px-3">Kategori</th>
+                        <th class="py-2.5 px-3">Uraian</th>
+                        <th class="py-2.5 px-3 text-right">Nominal</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-[#EAECF0]">
+                    @forelse($transactions as $t)
+                        <tr>
+                            <td class="py-2.5 px-3 whitespace-nowrap text-[#475467] font-medium">{{ $t->transaction_date->format('d/m/Y') }}</td>
+                            <td class="py-2.5 px-3 uppercase text-[10px] font-bold text-[#667085]">{{ $t->type }}</td>
+                            <td class="py-2.5 px-3 font-semibold text-[#0F172A]">{{ $t->account?->name }}</td>
+                            <td class="py-2.5 px-3 text-[#475467]">{{ $t->category?->name ?? '-' }}</td>
+                            <td class="py-2.5 px-3 text-[#344054]">{{ $t->description ?? '-' }}</td>
+                            <td class="py-2.5 px-3 text-right financial-number font-bold {{ $t->type === 'income' ? 'text-[#15803D]' : ($t->type === 'expense' ? 'text-[#B42318]' : 'text-[#344054]') }}">
+                                {{ $t->type === 'income' ? '+' : ($t->type === 'expense' ? '-' : '') }} Rp {{ number_format($t->amount, 0, ',', '.') }}
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" class="py-8 text-center text-[#98A2B3] font-medium">
+                                Tidak ada transaksi di periode ini.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
     </div>
+
 </div>
 @endsection

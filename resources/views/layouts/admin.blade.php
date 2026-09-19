@@ -1,130 +1,219 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="id" class="h-full bg-[#F4F6F8] text-[#101828] antialiased">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-@section('content')
-<!-- Komentar Bahasa Indonesia: Layout Admin Console Floating Curved Sidebar -->
-<div class="min-h-screen flex flex-col md:flex-row bg-slate-50">
-    
-    <!-- FLOATING CURVED LEFT SIDEBAR ADMIN -->
-    <aside class="w-full md:w-64 bg-white/95 border border-slate-200/80 rounded-3xl m-3 sm:m-4 flex flex-col justify-between shrink-0 print:hidden z-20 shadow-lg backdrop-blur-md">
-        <div>
-            <!-- Brand Logo & Admin Badge -->
-            <div class="p-5 border-b border-slate-100 space-y-4">
-                <a href="{{ url('/') }}" class="flex items-center gap-3 group">
-                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-600 to-yellow-500 text-white flex items-center justify-center font-bold text-lg shadow-md group-hover:scale-105 transition-transform">
-                        <i class="fa-solid fa-shield-halved"></i>
-                    </div>
-                    <div>
-                        <span class="text-lg font-extrabold tracking-tight text-slate-900 block leading-none">CashMind</span>
-                        <span class="text-[10px] text-amber-600 font-mono font-extrabold block mt-1 uppercase tracking-wider">Admin Console</span>
-                    </div>
-                </a>
+    <title>{{ $title ?? 'CashMind — Platform Operations Console' }}</title>
 
-                <div class="p-2.5 rounded-2xl bg-amber-50 border border-amber-200 text-xs flex items-center gap-2.5 shadow-xs">
-                    <div class="w-6 h-6 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-[10px] shrink-0">
-                        <i class="fa-solid fa-user-shield"></i>
-                    </div>
-                    <div class="truncate">
-                        <span class="text-xs font-bold text-slate-900 block truncate">{{ Auth::user()->name ?? 'Administrator' }}</span>
-                        <span class="text-[10px] text-amber-700 font-mono block font-bold">Super Admin</span>
-                    </div>
-                </div>
-            </div>
+    <!-- Google Fonts: Manrope -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-            <!-- CURVED MENU ITEMS ADMIN -->
-            <nav class="p-3 space-y-4 text-xs font-bold">
-                
-                <!-- GROUP 1: MONITORING -->
-                <div class="space-y-1">
-                    <div class="px-3 py-1 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider font-mono">Monitoring</div>
-                    
-                    <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-2xl transition {{ request()->is('admin/dashboard') ? 'bg-amber-50 text-amber-900 font-extrabold border-r-4 border-amber-500 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
-                        <i class="fa-solid fa-chart-line text-sm text-amber-600"></i>
-                        <span>Trafik & Analytics</span>
-                    </a>
-                </div>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-                <!-- GROUP 2: USER DIRECTORY -->
-                <div class="space-y-1">
-                    <div class="px-3 py-1 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider font-mono">Direktori</div>
+    <!-- Tailwind CSS & Alpine.js -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Manrope', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        cm: {
+                            bg: '#F4F6F8',
+                            surface: '#FFFFFF',
+                            text: '#101828',
+                            border: '#E4E7EC',
+                            primary: '#0F172A',
+                            accent: '#0F766E',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-                    <a href="{{ route('admin.users') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-2xl transition {{ request()->is('admin/users*') ? 'bg-amber-50 text-amber-900 font-extrabold border-r-4 border-amber-500 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
-                        <i class="fa-solid fa-users-gear text-sm text-amber-600"></i>
-                        <span>Direktori User</span>
-                    </a>
-                </div>
-
-                <!-- GROUP 3: SYSTEM AUDIT -->
-                <div class="space-y-1">
-                    <div class="px-3 py-1 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider font-mono">System Audit</div>
-
-                    <a href="{{ route('admin.logs') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-2xl transition {{ request()->is('admin/logs*') ? 'bg-amber-50 text-amber-900 font-extrabold border-r-4 border-amber-500 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
-                        <i class="fa-solid fa-clock-rotate-left text-sm text-amber-600"></i>
-                        <span>Audit Log Aktivitas</span>
-                    </a>
-                </div>
-            </nav>
-        </div>
-
-        <!-- Footer Sidebar Admin -->
-        <div class="p-3 border-t border-slate-100">
-            <a href="{{ url('/') }}" class="flex items-center gap-2.5 px-3 py-2 rounded-2xl text-xs text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition">
-                <i class="fa-solid fa-globe text-slate-400 text-xs"></i>
-                <span>Halaman Depan</span>
-            </a>
-        </div>
-    </aside>
-
-    <!-- AREA KONTEN UTAMA ADMIN -->
-    <div class="flex-1 flex flex-col min-w-0">
+    <style>
+        [x-cloak] { display: none !important; }
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: #0F172A; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 9999px; }
         
-        <!-- STICKY TOP HEADER BAR ADMIN -->
-        <header class="h-16 bg-white/80 backdrop-blur-md border-b border-slate-200/80 px-6 flex items-center justify-between gap-4 sticky top-0 z-30 print:hidden shadow-xs">
-            <!-- Breadcrumb Navigation -->
-            <div class="flex items-center gap-2 text-xs text-slate-500 font-semibold">
-                <span>Admin Console</span>
-                <i class="fa-solid fa-chevron-right text-[9px] text-slate-300"></i>
-                <span class="text-slate-900 font-extrabold">
-                    @if(request()->is('admin/dashboard')) Trafik & Analytics
-                    @elseif(request()->is('admin/users*')) Direktori User
-                    @elseif(request()->is('admin/logs*')) Audit Log Aktivitas
-                    @else Workspace Admin
-                    @endif
-                </span>
-            </div>
+        .cm-panel {
+            background-color: #FFFFFF;
+            border: 1px solid #E4E7EC;
+            border-radius: 16px;
+        }
+        
+        .cm-input {
+            background-color: #FFFFFF;
+            border: 1px solid #D0D5DD;
+            color: #101828;
+            border-radius: 10px;
+            padding: 0 14px;
+            height: 44px;
+            font-size: 0.875rem;
+            width: 100%;
+            transition: all 0.15s ease;
+        }
+        .cm-input:focus {
+            outline: none;
+            border-color: #0F766E;
+            box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.10);
+        }
 
-            <!-- Profile & Logout Controls -->
-            <div class="flex items-center gap-3 ml-auto">
-                <div class="px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[11px] font-mono font-bold flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span>System Active</span>
+        .btn-primary {
+            background-color: #0F172A;
+            color: #FFFFFF;
+            font-weight: 600;
+            border-radius: 10px;
+            height: 42px;
+            padding: 0 18px;
+            font-size: 0.875rem;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-primary:hover {
+            background-color: #1E293B;
+        }
+
+        .btn-secondary {
+            background-color: #FFFFFF;
+            border: 1px solid #D0D5DD;
+            color: #344054;
+            font-weight: 600;
+            border-radius: 10px;
+            height: 42px;
+            padding: 0 18px;
+            font-size: 0.875rem;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body class="h-full bg-[#F4F6F8] text-[#101828] font-sans antialiased">
+    <div class="min-h-screen flex">
+
+        <!-- ADMIN SIDEBAR (Compact 72px) -->
+        <aside class="w-[72px] bg-[#0F172A] text-slate-300 border-r border-slate-800 flex flex-col justify-between hidden md:flex fixed inset-y-0 z-30">
+            <div class="flex flex-col items-center">
+                <!-- Brand Logo Header -->
+                <div class="h-16 w-full flex items-center justify-center border-b border-slate-800">
+                    <a href="{{ route('admin.dashboard') }}" class="w-10 h-10 rounded-xl bg-[#0F766E] text-white flex items-center justify-center font-bold" title="Admin Operations">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </a>
                 </div>
 
-                @auth
-                    <div class="flex items-center gap-3 pl-3 border-l border-slate-200">
-                        <div class="w-9 h-9 rounded-2xl bg-amber-100 border border-amber-200 flex items-center justify-center text-xs font-bold text-amber-800 uppercase shadow-xs">
-                            {{ substr(Auth::user()->name, 0, 1) }}
-                        </div>
-                        <div class="hidden sm:flex flex-col text-left">
-                            <span class="text-xs font-extrabold text-slate-900 leading-none">{{ Auth::user()->name }}</span>
-                            <span class="text-[10px] text-amber-600 font-bold leading-none mt-1">Super Admin</span>
-                        </div>
+                <!-- Navigation Links -->
+                <nav class="py-6 space-y-4 w-full flex flex-col items-center">
+                    <a href="{{ route('admin.dashboard') }}" class="relative w-12 h-12 rounded-xl flex items-center justify-center transition-colors group {{ request()->routeIs('admin.dashboard') ? 'bg-slate-800 text-amber-400 font-bold' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}" title="Ringkasan Sistem">
+                        @if(request()->routeIs('admin.dashboard'))
+                            <div class="absolute left-0 top-2 bottom-2 w-1 bg-[#0F766E] rounded-r-full"></div>
+                        @endif
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                    </a>
 
-                        <!-- Form Logout -->
-                        <form method="POST" action="{{ route('logout') }}" class="inline ml-1">
-                            @csrf
-                            <button type="submit" title="Keluar Akun" class="w-9 h-9 rounded-2xl bg-slate-100 border border-slate-200 hover:bg-rose-50 hover:border-rose-200 text-slate-500 hover:text-rose-600 flex items-center justify-center transition shadow-xs">
-                                <i class="fa-solid fa-right-from-bracket text-xs"></i>
-                            </button>
-                        </form>
-                    </div>
-                @endauth
+                    <a href="{{ route('admin.users.index') }}" class="relative w-12 h-12 rounded-xl flex items-center justify-center transition-colors group {{ request()->routeIs('admin.users.*') ? 'bg-slate-800 text-amber-400 font-bold' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}" title="Manajemen Pengguna">
+                        @if(request()->routeIs('admin.users.*'))
+                            <div class="absolute left-0 top-2 bottom-2 w-1 bg-[#0F766E] rounded-r-full"></div>
+                        @endif
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </a>
+
+                    <a href="{{ route('admin.master.index') }}" class="relative w-12 h-12 rounded-xl flex items-center justify-center transition-colors group {{ request()->routeIs('admin.master.*') ? 'bg-slate-800 text-amber-400 font-bold' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}" title="Master Data">
+                        @if(request()->routeIs('admin.master.*'))
+                            <div class="absolute left-0 top-2 bottom-2 w-1 bg-[#0F766E] rounded-r-full"></div>
+                        @endif
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+                    </a>
+
+                    <a href="{{ route('admin.features.index') }}" class="relative w-12 h-12 rounded-xl flex items-center justify-center transition-colors group {{ request()->routeIs('admin.features.*') ? 'bg-slate-800 text-amber-400 font-bold' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}" title="Fitur Platform">
+                        @if(request()->routeIs('admin.features.*'))
+                            <div class="absolute left-0 top-2 bottom-2 w-1 bg-[#0F766E] rounded-r-full"></div>
+                        @endif
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                    </a>
+
+                    <a href="{{ route('admin.logs.index') }}" class="relative w-12 h-12 rounded-xl flex items-center justify-center transition-colors group {{ request()->routeIs('admin.logs.*') ? 'bg-slate-800 text-amber-400 font-bold' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}" title="Log Keamanan">
+                        @if(request()->routeIs('admin.logs.*'))
+                            <div class="absolute left-0 top-2 bottom-2 w-1 bg-[#0F766E] rounded-r-full"></div>
+                        @endif
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </a>
+                </nav>
             </div>
-        </header>
 
-        <!-- KONTEN HALAMAN UTAMA ADMIN -->
-        <main class="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto space-y-6">
-            @yield('admin-content')
-        </main>
+            <!-- Profile Footer -->
+            <div class="p-3 flex flex-col items-center border-t border-slate-800 gap-3">
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="w-10 h-10 rounded-xl flex items-center justify-center text-slate-400 hover:text-rose-400 hover:bg-slate-800 transition-colors" title="Keluar">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    </button>
+                </form>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTAINER -->
+        <div class="flex-1 md:ml-[72px] flex flex-col min-w-0">
+            
+            <!-- HEADER (68px) -->
+            <header class="h-[68px] bg-white border-b border-[#EAECF0] px-4 md:px-8 flex items-center justify-between sticky top-0 z-20">
+                <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-md bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold flex items-center gap-1.5">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        <span>Admin Console</span>
+                    </span>
+                    <span class="text-xs text-[#667085] hidden sm:inline">| Manajemen Platform (Isolasi Data Finansial User)</span>
+                </div>
+            </header>
+
+            <!-- FLASH NOTIFICATIONS -->
+            <div class="px-4 md:px-8 pt-6">
+                @if(session('success'))
+                    <div class="p-4 rounded-xl bg-[#ECFDF3] border border-[#ABE5C6] text-[#15803D] text-xs font-semibold flex items-center justify-between shadow-xs">
+                        <div class="flex items-center gap-2.5">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span>{{ session('success') }}</span>
+                        </div>
+                    </div>
+                @endif
+
+                @if($errors->any())
+                    <div class="p-4 rounded-xl bg-[#FEF3F2] border border-[#FECDCA] text-[#B42318] text-xs font-semibold space-y-1 shadow-xs">
+                        <div class="flex items-center gap-2 mb-1">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                            <span>Mohon periksa kembali inputan Anda:</span>
+                        </div>
+                        <ul class="list-disc list-inside text-xs font-normal pl-2">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+            </div>
+
+            <!-- MAIN CONTENT -->
+            <main class="w-full max-w-[1360px] mx-auto p-4 md:p-8 flex-1">
+                @yield('content')
+            </main>
+        </div>
+
     </div>
-</div>
-@endsection
+</body>
+</html>
