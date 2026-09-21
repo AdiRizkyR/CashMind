@@ -84,6 +84,11 @@ class User extends Authenticatable
         return $this->hasMany(SecurityLog::class);
     }
 
+    public function profile(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(UserProfile::class);
+    }
+
     public function isAdmin(): bool
     {
         return $this->role === 'admin';

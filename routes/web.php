@@ -49,10 +49,18 @@ Route::post('/app/accounts', [AccountController::class, 'store'])->name('user.ac
 Route::put('/app/accounts/{account}', [AccountController::class, 'update'])->name('user.accounts.update')->middleware('auth', 'role:user', EnsureUserIsActive::class);
 Route::delete('/app/accounts/{account}', [AccountController::class, 'destroy'])->name('user.accounts.destroy')->middleware('auth', 'role:user', EnsureUserIsActive::class);
 
+use App\Http\Controllers\User\UserProfileController;
+
 // Budget Planning
 Route::get('/app/budget', [BudgetController::class, 'index'])->name('user.budget.index')->middleware('auth', 'role:user', EnsureUserIsActive::class);
 Route::post('/app/budget', [BudgetController::class, 'store'])->name('user.budget.store')->middleware('auth', 'role:user', EnsureUserIsActive::class);
+Route::post('/app/budget/apply-ai', [BudgetController::class, 'applyAiRecommendation'])->name('user.budget.apply-ai')->middleware('auth', 'role:user', EnsureUserIsActive::class);
 Route::delete('/app/budget/{budget}', [BudgetController::class, 'destroy'])->name('user.budget.destroy')->middleware('auth', 'role:user', EnsureUserIsActive::class);
+
+// User Profile & Financial ML Settings
+Route::get('/app/profile', [UserProfileController::class, 'index'])->name('user.profile.index')->middleware('auth', 'role:user', EnsureUserIsActive::class);
+Route::post('/app/profile', [UserProfileController::class, 'update'])->name('user.profile.update')->middleware('auth', 'role:user', EnsureUserIsActive::class);
+Route::get('/user/profile', [UserProfileController::class, 'index'])->middleware('auth', 'role:user', EnsureUserIsActive::class); // Alias
 
 // Categories
 Route::get('/app/categories', [CategoryController::class, 'index'])->name('user.categories.index')->middleware('auth', 'role:user', EnsureUserIsActive::class);

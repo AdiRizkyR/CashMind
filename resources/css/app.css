@@ -1,3 +1,180 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    html {
+        font-family: 'Manrope', Inter, system-ui, sans-serif;
+        background-color: #F1F5F9;
+        color: #0F172A;
+        scroll-behavior: smooth;
+    }
+    
+    h1, h2, h3, .font-display {
+        font-family: 'Space Grotesk', 'Manrope', sans-serif;
+    }
+}
+
+/* Scrollbar Customization */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #F1F5F9;
+}
+::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #059669;
+}
+
+/* Financial Numbering Format */
+.financial-number {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+}
+
+/* Card & Panel Base */
+.cm-panel {
+    background-color: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.cm-panel-hover:hover {
+    border-color: #CBD5E1;
+    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+    transform: translateY(-1px);
+}
+
+/* Input Styles */
+.cm-input {
+    background-color: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    color: #0F172A;
+    border-radius: 12px;
+    padding: 0 16px;
+    height: 46px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    width: 100%;
+    transition: all 0.18s ease-in-out;
+}
+@media (max-width: 768px) {
+    .cm-input {
+        height: 48px;
+    }
+}
+.cm-input:focus {
+    outline: none;
+    border-color: #059669;
+    box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.14);
+}
+
+/* Button Classes */
+.btn-primary {
+    background-color: #0F172A;
+    color: #FFFFFF;
+    font-weight: 600;
+    border-radius: 12px;
+    height: 44px;
+    padding: 0 20px;
+    font-size: 0.875rem;
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.15);
+}
+.btn-primary:hover {
+    background-color: #1E293B;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);
+}
+
+.btn-emerald {
+    background-color: #059669;
+    color: #FFFFFF;
+    font-weight: 600;
+    border-radius: 12px;
+    height: 44px;
+    padding: 0 20px;
+    font-size: 0.875rem;
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 14px rgba(5, 150, 105, 0.3);
+}
+.btn-emerald:hover {
+    background-color: #047857;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(5, 150, 105, 0.4);
+}
+
+.btn-secondary {
+    background-color: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    color: #334155;
+    font-weight: 600;
+    border-radius: 12px;
+    height: 44px;
+    padding: 0 20px;
+    font-size: 0.875rem;
+    transition: all 0.18s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.btn-secondary:hover {
+    background-color: #F8FAFC;
+    color: #0F172A;
+    border-color: #94A3B8;
+}
+
+/* Status Badges */
+.badge-income {
+    background-color: #ECFDF5;
+    color: #059669;
+    border: 1px solid #A7F3D0;
+    font-weight: 700;
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.badge-expense {
+    background-color: #FFF1F2;
+    color: #E11D48;
+    border: 1px solid #FECDD3;
+    font-weight: 700;
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.badge-transfer {
+    background-color: #F1F5F9;
+    color: #475467;
+    border: 1px solid #E2E8F0;
+    font-weight: 700;
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
