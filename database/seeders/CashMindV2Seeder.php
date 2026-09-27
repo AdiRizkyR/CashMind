@@ -64,8 +64,8 @@ class CashMindV2Seeder extends Seeder
             );
         }
 
-        // 3. Seed Seeders Data for user@cashmind.id and demouser@cashmind.id
-        $usersToSeed = User::whereIn('email', ['user@cashmind.id', 'demouser@cashmind.id'])->get();
+        // 3. Seed Seeders Data for user@cashmind.id, demouser@cashmind.id, and admin@cashmind.id
+        $usersToSeed = User::whereIn('email', ['user@cashmind.id', 'demouser@cashmind.id', 'admin@cashmind.id'])->get();
 
         foreach ($usersToSeed as $user) {
             $bcaInst = FinancialInstitution::where('name', 'Bank BCA')->first();
