@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="id" class="h-full bg-[#F1F5F9] text-[#0F172A] antialiased">
+<html lang="id" class="h-full bg-[#F8FAFC] text-[#0F172A] antialiased">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $title ?? 'CashMind | Studio Finansial Personal' }}</title>
+    <title>{{ $title ?? 'CashMind | Studio Pencatatan & Pengendalian Keuangan' }}</title>
 
-    <!-- Google Fonts: Space Grotesk & Manrope -->
+    <!-- Google Fonts: Inter & Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -22,24 +22,24 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Manrope', 'Inter', 'sans-serif'],
-                        display: ['Space Grotesk', 'Manrope', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
                     },
                     colors: {
                         cm: {
-                            dark: '#0B132B',
-                            darkSoft: '#1C2541',
-                            bg: '#F1F5F9',
+                            dark: '#0F172A',
+                            darkSoft: '#1E293B',
+                            bg: '#F8FAFC',
                             surface: '#FFFFFF',
-                            ink: '#090D16',
-                            text: '#0F172A',
+                            ink: '#0F172A',
+                            text: '#334155',
                             border: '#E2E8F0',
-                            primary: '#0F172A',
-                            accent: '#059669',
+                            primary: '#4F46E5', // Indigo primary
+                            accent: '#059669', // Green success
                             accentSoft: '#ECFDF5',
-                            income: '#059669',
-                            expense: '#E11D48',
-                            warning: '#D97706',
+                            income: '#10B981',
+                            expense: '#EF4444',
+                            warning: '#F59E0B',
                         }
                     }
                 }
@@ -50,19 +50,19 @@
 
     <style>
         [x-cloak] { display: none !important; }
-        ::-webkit-scrollbar { width: 5px; height: 5px; }
-        ::-webkit-scrollbar-track { background: #F1F5F9; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #F8FAFC; }
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 9999px; }
-        ::-webkit-scrollbar-thumb:hover { background: #059669; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748B; }
         
-        .financial-number { font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
-        .font-display { font-family: 'Space Grotesk', sans-serif; }
+        .financial-number { font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+        .font-display { font-family: 'Plus Jakarta Sans', sans-serif; }
 
         .cm-panel {
             background-color: #FFFFFF;
             border: 1px solid #E2E8F0;
             border-radius: 16px;
-            box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+            box-shadow: 0 4px 18px -2px rgba(15, 23, 42, 0.04);
         }
         
         .cm-input {
@@ -71,22 +71,32 @@
             color: #0F172A;
             border-radius: 12px;
             padding: 0 16px;
-            height: 46px;
+            height: 44px;
             font-size: 0.875rem;
             width: 100%;
             transition: all 0.18s ease-in-out;
-        }
-        @media (max-width: 768px) {
-            .cm-input { height: 48px; }
+            box-sizing: border-box;
         }
         .cm-input:focus {
             outline: none;
-            border-color: #059669;
-            box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.14);
+            border-color: #4F46E5;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
+        }
+
+        /* Prevent select dropdown arrow from overlapping text */
+        select.cm-input, select.cm-select, select {
+            padding-right: 2.75rem !important;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23475467' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important;
+            background-position: right 0.75rem center !important;
+            background-repeat: no-repeat !important;
+            background-size: 1.25rem 1.25rem !important;
+            appearance: none !important;
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
         }
 
         .btn-primary {
-            background-color: #0F172A;
+            background-color: #4F46E5;
             color: #FFFFFF;
             font-weight: 600;
             border-radius: 12px;
@@ -98,8 +108,10 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+            cursor: pointer;
         }
-        .btn-primary:hover { background-color: #1E293B; }
+        .btn-primary:hover { background-color: #4338CA; }
 
         .btn-emerald {
             background-color: #059669;
@@ -114,7 +126,8 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            box-shadow: 0 4px 14px rgba(5, 150, 105, 0.25);
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
+            cursor: pointer;
         }
         .btn-emerald:hover { background-color: #047857; }
 
@@ -132,6 +145,7 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            cursor: pointer;
         }
         .btn-secondary:hover { background-color: #F8FAFC; color: #0F172A; }
     </style>
@@ -142,6 +156,8 @@
     quickType: 'expense',
     quickRawAmount: '',
     quickFormattedAmount: '',
+    quickRawAdminFee: '',
+    quickFormattedAdminFee: '',
     toastMessage: '{{ session('success') }}',
     showToast: {{ session('success') ? 'true' : 'false' }},
     init() {
@@ -149,34 +165,38 @@
             setTimeout(() => { this.showToast = false; }, 3500);
         }
     },
-    formatRupiah(val) {
+    formatRupiah(val, field) {
         let digits = String(val).replace(/[^0-9]/g, '');
-        this.quickRawAmount = digits;
-        this.quickFormattedAmount = digits ? 'Rp ' + Number(digits).toLocaleString('id-ID') : '';
+        if (field === 'amount') {
+            this.quickRawAmount = digits;
+            this.quickFormattedAmount = digits ? 'Rp ' + Number(digits).toLocaleString('id-ID') : '';
+        } else if (field === 'admin_fee') {
+            this.quickRawAdminFee = digits;
+            this.quickFormattedAdminFee = digits ? 'Rp ' + Number(digits).toLocaleString('id-ID') : '';
+        }
     }
-}" class="h-full bg-[#F1F5F9] text-[#0F172A] font-sans antialiased selection:bg-[#059669] selection:text-white">
+}" class="h-full bg-[#F8FAFC] text-[#0F172A] font-sans antialiased selection:bg-[#4F46E5] selection:text-white">
     <div class="min-h-screen flex flex-col md:flex-row">
 
-        <!-- DESKTOP RICH DARK NAVIGATION RAIL (72px - Studio Finansial Modern) -->
-        <aside class="w-[76px] bg-[#0B132B] text-slate-300 border-r border-[#1C2541] flex-col justify-between hidden md:flex fixed inset-y-0 z-30 shadow-xl">
+        <!-- DESKTOP SIDEBAR NAVIGATION (76px - CashMind v2 System Rail) -->
+        <aside class="w-[76px] bg-[#0F172A] text-slate-300 border-r border-[#1E293B] flex-col justify-between hidden md:flex fixed inset-y-0 z-30 shadow-2xl">
             <div class="flex flex-col items-center">
                 <!-- Brand Logo Header -->
-                <div class="h-20 w-full flex items-center justify-center border-b border-[#1C2541]">
-                    <a href="{{ route('user.dashboard') }}" class="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#059669] to-[#047857] text-white flex items-center justify-center font-bold shadow-lg shadow-[#059669]/30 hover:scale-105 transition-transform" title="CashMind Ledger OS">
+                <div class="h-[68px] w-full flex items-center justify-center border-b border-[#1E293B]">
+                    <a href="{{ route('user.dashboard') }}" class="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#4F46E5] to-[#3730A3] text-white flex items-center justify-center font-bold shadow-lg shadow-[#4F46E5]/30 hover:scale-105 transition-transform" title="CashMind Financial Control Center">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/>
-                            <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/>
-                            <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>
+                            <rect width="20" height="14" x="2" y="5" rx="2"/>
+                            <line x1="2" x2="22" y1="10" y2="10"/>
                         </svg>
                     </a>
                 </div>
 
-                <!-- Navigation Rail Menu -->
-                <nav class="py-6 space-y-3 w-full flex flex-col items-center">
-                    <!-- Dashboard -->
-                    <a href="{{ route('user.dashboard') }}" class="relative w-12 h-12 rounded-xl flex items-center justify-center transition-all group {{ request()->routeIs('user.dashboard') ? 'bg-[#1C2541] text-[#10B981] font-bold shadow-md' : 'text-slate-400 hover:bg-[#1C2541]/70 hover:text-white' }}" title="Dashboard">
+                <!-- 5 Core System Menus Navigation -->
+                <nav class="py-6 space-y-3.5 w-full flex flex-col items-center">
+                    <!-- 1. Dashboard -->
+                    <a href="{{ route('user.dashboard') }}" class="relative w-12 h-12 rounded-xl flex items-center justify-center transition-all group {{ request()->routeIs('user.dashboard') ? 'bg-[#1E293B] text-[#818CF8] font-bold shadow-md' : 'text-slate-400 hover:bg-[#1E293B]/80 hover:text-white' }}" title="1. Dashboard (Overview)">
                         @if(request()->routeIs('user.dashboard'))
-                            <div class="absolute left-0 top-2 bottom-2 w-1.5 bg-[#10B981] rounded-r-full shadow-sm shadow-[#10B981]"></div>
+                            <div class="absolute left-0 top-2 bottom-2 w-1.5 bg-[#818CF8] rounded-r-full shadow-sm"></div>
                         @endif
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                             <rect width="7" height="9" x="3" y="3" rx="1"/>
@@ -186,89 +206,65 @@
                         </svg>
                     </a>
 
-                    <!-- Transactions -->
-                    <a href="{{ route('user.transactions.index') }}" class="relative w-12 h-12 rounded-xl flex items-center justify-center transition-all group {{ request()->routeIs('user.transactions.*') ? 'bg-[#1C2541] text-[#10B981] font-bold shadow-md' : 'text-slate-400 hover:bg-[#1C2541]/70 hover:text-white' }}" title="Transaksi">
+                    <!-- 2. Income & Expenses -->
+                    <a href="{{ route('user.transactions.index') }}" class="relative w-12 h-12 rounded-xl flex items-center justify-center transition-all group {{ request()->routeIs('user.transactions.*') ? 'bg-[#1E293B] text-[#818CF8] font-bold shadow-md' : 'text-slate-400 hover:bg-[#1E293B]/80 hover:text-white' }}" title="2. Income & Expenses">
                         @if(request()->routeIs('user.transactions.*'))
-                            <div class="absolute left-0 top-2 bottom-2 w-1.5 bg-[#10B981] rounded-r-full shadow-sm shadow-[#10B981]"></div>
+                            <div class="absolute left-0 top-2 bottom-2 w-1.5 bg-[#818CF8] rounded-r-full shadow-sm"></div>
                         @endif
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                            <polyline points="14 2 14 8 20 8"/>
-                            <line x1="16" y1="13" x2="8" y2="13"/>
-                            <line x1="16" y1="17" x2="8" y2="17"/>
+                            <line x1="12" x2="12" y1="2" y2="22"/>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
                         </svg>
                     </a>
 
-                    <!-- Accounts -->
-                    <a href="{{ route('user.accounts.index') }}" class="relative w-12 h-12 rounded-xl flex items-center justify-center transition-all group {{ request()->routeIs('user.accounts.*') ? 'bg-[#1C2541] text-[#10B981] font-bold shadow-md' : 'text-slate-400 hover:bg-[#1C2541]/70 hover:text-white' }}" title="Rekening">
-                        @if(request()->routeIs('user.accounts.*'))
-                            <div class="absolute left-0 top-2 bottom-2 w-1.5 bg-[#10B981] rounded-r-full shadow-sm shadow-[#10B981]"></div>
+                    <!-- 3. Master Data -->
+                    <a href="{{ route('user.master-data.index') }}" class="relative w-12 h-12 rounded-xl flex items-center justify-center transition-all group {{ request()->routeIs('user.master-data.*') || request()->routeIs('user.categories.*') || request()->routeIs('user.accounts.*') ? 'bg-[#1E293B] text-[#818CF8] font-bold shadow-md' : 'text-slate-400 hover:bg-[#1E293B]/80 hover:text-white' }}" title="3. Master Data">
+                        @if(request()->routeIs('user.master-data.*') || request()->routeIs('user.categories.*') || request()->routeIs('user.accounts.*'))
+                            <div class="absolute left-0 top-2 bottom-2 w-1.5 bg-[#818CF8] rounded-r-full shadow-sm"></div>
                         @endif
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                            <rect width="20" height="12" x="2" y="6" rx="2"/>
-                            <circle cx="12" cy="12" r="2"/>
+                            <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                            <path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/>
                         </svg>
                     </a>
 
-                    <!-- Budget -->
-                    <a href="{{ route('user.budget.index') }}" class="relative w-12 h-12 rounded-xl flex items-center justify-center transition-all group {{ request()->routeIs('user.budget.*') ? 'bg-[#1C2541] text-[#10B981] font-bold shadow-md' : 'text-slate-400 hover:bg-[#1C2541]/70 hover:text-white' }}" title="Anggaran">
-                        @if(request()->routeIs('user.budget.*'))
-                            <div class="absolute left-0 top-2 bottom-2 w-1.5 bg-[#10B981] rounded-r-full shadow-sm shadow-[#10B981]"></div>
-                        @endif
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="4" x2="20" y1="12" y2="12"/>
-                            <line x1="4" x2="20" y1="6" y2="6"/>
-                            <line x1="4" x2="20" y1="18" y2="18"/>
-                            <circle cx="8" cy="12" r="2"/>
-                            <circle cx="16" cy="6" r="2"/>
-                            <circle cx="12" cy="18" r="2"/>
-                        </svg>
-                    </a>
-
-                    <!-- Goals -->
-                    <a href="{{ route('user.goals.index') }}" class="relative w-12 h-12 rounded-xl flex items-center justify-center transition-all group {{ request()->routeIs('user.goals.*') ? 'bg-[#1C2541] text-[#10B981] font-bold shadow-md' : 'text-slate-400 hover:bg-[#1C2541]/70 hover:text-white' }}" title="Target Keuangan">
-                        @if(request()->routeIs('user.goals.*'))
-                            <div class="absolute left-0 top-2 bottom-2 w-1.5 bg-[#10B981] rounded-r-full shadow-sm shadow-[#10B981]"></div>
-                        @endif
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"/>
-                            <circle cx="12" cy="12" r="6"/>
-                            <circle cx="12" cy="12" r="2"/>
-                        </svg>
-                    </a>
-
-                    <!-- Reports -->
-                    <a href="{{ route('user.reports.index') }}" class="relative w-12 h-12 rounded-xl flex items-center justify-center transition-all group {{ request()->routeIs('user.reports.*') ? 'bg-[#1C2541] text-[#10B981] font-bold shadow-md' : 'text-slate-400 hover:bg-[#1C2541]/70 hover:text-white' }}" title="Laporan">
+                    <!-- 4. Usage Summary -->
+                    <a href="{{ route('user.reports.index') }}" class="relative w-12 h-12 rounded-xl flex items-center justify-center transition-all group {{ request()->routeIs('user.reports.*') ? 'bg-[#1E293B] text-[#818CF8] font-bold shadow-md' : 'text-slate-400 hover:bg-[#1E293B]/80 hover:text-white' }}" title="4. Usage Summary">
                         @if(request()->routeIs('user.reports.*'))
-                            <div class="absolute left-0 top-2 bottom-2 w-1.5 bg-[#10B981] rounded-r-full shadow-sm shadow-[#10B981]"></div>
+                            <div class="absolute left-0 top-2 bottom-2 w-1.5 bg-[#818CF8] rounded-r-full shadow-sm"></div>
                         @endif
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M3 3v18h18"/>
                             <path d="m19 9-5 5-4-4-3 3"/>
                         </svg>
                     </a>
-                    <!-- User Profile & ML Settings -->
-                    <a href="{{ route('user.profile.index') }}" class="relative w-12 h-12 rounded-xl flex items-center justify-center transition-all group {{ request()->routeIs('user.profile.*') ? 'bg-[#1C2541] text-[#10B981] font-bold shadow-md' : 'text-slate-400 hover:bg-[#1C2541]/70 hover:text-white' }}" title="Profil Saya & ML Settings">
-                        @if(request()->routeIs('user.profile.*'))
-                            <div class="absolute left-0 top-2 bottom-2 w-1.5 bg-[#10B981] rounded-r-full shadow-sm shadow-[#10B981]"></div>
+
+                    <!-- 5. Missing Budget -->
+                    <a href="{{ route('user.reconciliation.index') }}" class="relative w-12 h-12 rounded-xl flex items-center justify-center transition-all group {{ request()->routeIs('user.reconciliation.*') ? 'bg-[#1E293B] text-[#818CF8] font-bold shadow-md' : 'text-slate-400 hover:bg-[#1E293B]/80 hover:text-white' }}" title="5. Missing Budget">
+                        @if(request()->routeIs('user.reconciliation.*'))
+                            <div class="absolute left-0 top-2 bottom-2 w-1.5 bg-[#818CF8] rounded-r-full shadow-sm"></div>
                         @endif
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
-                            <circle cx="12" cy="7" r="4"/>
+                            <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+                            <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+                            <path d="M7 21h10"/>
+                            <path d="M12 3v18"/>
+                            <path d="M3 7h18"/>
                         </svg>
                     </a>
                 </nav>
             </div>
 
             <!-- Profile / Logout Actions -->
-            <div class="p-3 flex flex-col items-center border-t border-[#1C2541] gap-3">
-                <a href="{{ route('user.profile.index') }}" class="w-10 h-10 rounded-xl flex items-center justify-center {{ request()->routeIs('user.profile.*') ? 'bg-[#1C2541] text-[#10B981]' : 'text-slate-400 hover:bg-[#1C2541] hover:text-white' }} transition-colors" title="Profil Finansial Saya">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <div class="p-3 flex flex-col items-center border-t border-[#1E293B] gap-3">
+                <a href="{{ route('user.profile.index') }}" class="relative w-10 h-10 rounded-xl flex items-center justify-center {{ request()->routeIs('user.profile.*') ? 'bg-[#1E293B] text-[#818CF8] ring-1 ring-[#818CF8]/40' : 'text-slate-400 hover:bg-[#1E293B] hover:text-white' }} transition-colors" title="Profil Saya">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 </a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="w-10 h-10 rounded-xl flex items-center justify-center text-slate-400 hover:text-rose-400 hover:bg-rose-950/40 transition-colors" title="Keluar">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                     </button>
                 </form>
             </div>
@@ -277,26 +273,68 @@
         <!-- MAIN CONTAINER -->
         <div class="flex-1 md:ml-[76px] flex flex-col min-w-0 pb-24 md:pb-8">
             
-            <!-- TOP HEADER (68px) -->
+            <!-- TOP HEADER WITH GLOBAL MONTH & YEAR SELECTOR (68px) -->
             <header class="h-[68px] bg-white border-b border-[#E2E8F0] px-4 md:px-8 flex items-center justify-between sticky top-0 z-20 shadow-xs">
-                <div class="flex items-center gap-3">
-                    <span class="text-xs font-semibold text-[#475467]">
-                        {{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}
+                <!-- Global Month & Year Context Selector -->
+                <form method="GET" action="{{ url()->current() }}" class="flex items-center gap-2">
+                    <!-- Preserve existing tab / query params -->
+                    @if(request('tab')) <input type="hidden" name="tab" value="{{ request('tab') }}"> @endif
+                    @if(request('account_id')) <input type="hidden" name="account_id" value="{{ request('account_id') }}"> @endif
+
+                    <div class="flex items-center gap-2 bg-[#F1F5F9] p-1.5 rounded-2xl border border-[#E2E8F0]">
+                        <div class="flex items-center gap-1.5 pl-2 text-[#475467]">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                                <line x1="16" x2="16" y1="2" y2="6"/>
+                                <line x1="8" x2="8" y1="2" y2="6"/>
+                                <line x1="3" x2="21" y1="10" y2="10"/>
+                            </svg>
+                        </div>
+                        
+                        <select name="month" onchange="this.form.submit()" class="cm-select bg-white border border-[#CBD5E1] text-xs font-bold text-[#0F172A] rounded-xl pl-3 pr-8 py-2 cursor-pointer shadow-xs focus:ring-2 focus:ring-[#4F46E5]/20 min-w-[130px]">
+                            @foreach(range(1, 12) as $m)
+                                @php $date = \Carbon\Carbon::createFromDate(null, $m, 1); @endphp
+                                <option value="{{ $m }}" {{ (request('month', $month ?? date('n')) == $m) ? 'selected' : '' }}>
+                                    {{ $date->translatedFormat('F') }}
+                                </option>
+                            @endforeach
+                        </select>
+
+                        <select name="year" onchange="this.form.submit()" class="cm-select bg-white border border-[#CBD5E1] text-xs font-bold text-[#0F172A] rounded-xl pl-3 pr-8 py-2 cursor-pointer shadow-xs focus:ring-2 focus:ring-[#4F46E5]/20 min-w-[90px]">
+                            @foreach(range(date('Y') - 3, date('Y') + 2) as $y)
+                                <option value="{{ $y }}" {{ (request('year', $year ?? date('Y')) == $y) ? 'selected' : '' }}>
+                                    {{ $y }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <span class="text-[11px] font-bold text-[#4F46E5] hidden lg:inline-flex items-center gap-1.5 bg-[#EEF2FF] px-3 py-1.5 rounded-full border border-[#C7D2FE]">
+                        <span class="w-2 h-2 rounded-full bg-[#4F46E5] animate-pulse"></span>
+                        <span>Periode Aktif</span>
                     </span>
-                    <span class="hidden sm:inline-block w-1.5 h-1.5 rounded-full bg-[#CBD5E1]"></span>
-                    <span class="text-[11px] font-bold text-[#059669] hidden sm:inline-flex items-center gap-1.5 bg-[#ECFDF5] px-3 py-1 rounded-full border border-[#A7F3D0]">
-                        <span class="w-2 h-2 rounded-full bg-[#059669]"></span>
-                        Private Studio Workspace
-                    </span>
-                </div>
+                </form>
 
                 <div class="flex items-center gap-3">
+                    <!-- User Profile Quick Badge -->
+                    <a href="{{ route('user.profile.index') }}" class="hidden sm:flex items-center gap-2.5 p-1.5 pr-3 rounded-2xl bg-[#F8FAFC] border border-[#E2E8F0] hover:bg-[#EEF2FF] hover:border-[#C7D2FE] transition group" title="Profil Saya">
+                        <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-[#4F46E5] to-[#3730A3] text-white flex items-center justify-center text-xs font-extrabold shadow-sm">
+                            {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}
+                        </div>
+                        <div class="text-left leading-tight">
+                            <span class="text-xs font-bold text-[#0F172A] block truncate max-w-[120px] group-hover:text-[#4F46E5]">{{ Auth::user()->name }}</span>
+                            <span class="text-[10px] text-[#64748B] font-semibold block">Personal OS</span>
+                        </div>
+                    </a>
+
+                    <!-- Quick Add Transaction Button -->
                     <button @click="openSideSheet = true" class="btn-emerald">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="12" y1="5" x2="12" y2="19"/>
                             <line x1="5" y1="12" x2="19" y2="12"/>
                         </svg>
-                        <span>Catat Transaksi</span>
+                        <span class="hidden sm:inline">Catat Transaksi</span>
+                        <span class="sm:hidden">Tambah</span>
                     </button>
                 </div>
             </header>
@@ -316,10 +354,10 @@
                 </button>
             </div>
 
-            <!-- INLINE ERROR ALERT -->
+            <!-- INLINE ERROR ALERT SUMMARY -->
             @if($errors->any())
                 <div class="px-4 md:px-8 pt-6">
-                    <div class="p-4 rounded-xl bg-[#FFF1F2] border border-[#FECDD3] text-[#E11D48] text-xs font-semibold space-y-1">
+                    <div class="p-4 rounded-xl bg-[#FFF1F2] border border-[#FECDD3] text-[#E11D48] text-xs font-semibold space-y-1 shadow-sm">
                         <div class="flex items-center gap-2 mb-1">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="10"/>
@@ -344,25 +382,25 @@
         </div>
 
         <!-- MOBILE FIXED BOTTOM NAVIGATION BAR -->
-        <div class="md:hidden fixed bottom-0 inset-x-0 bg-[#0B132B] text-slate-300 border-t border-[#1C2541] h-16 z-40 flex items-center justify-around px-2 pb-[env(safe-area-inset-bottom)] shadow-2xl">
-            <a href="{{ route('user.dashboard') }}" class="flex flex-col items-center justify-center w-14 py-1 {{ request()->routeIs('user.dashboard') ? 'text-[#10B981] font-bold' : 'text-slate-400' }}">
+        <div class="md:hidden fixed bottom-0 inset-x-0 bg-[#0F172A] text-slate-300 border-t border-[#1E293B] h-16 z-40 flex items-center justify-around px-2 pb-[env(safe-area-inset-bottom)] shadow-2xl">
+            <a href="{{ route('user.dashboard') }}" class="flex flex-col items-center justify-center w-14 py-1 {{ request()->routeIs('user.dashboard') ? 'text-[#818CF8] font-bold' : 'text-slate-400' }}">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
                 <span class="text-[10px] mt-1">Dashboard</span>
             </a>
 
-            <a href="{{ route('user.transactions.index') }}" class="flex flex-col items-center justify-center w-14 py-1 {{ request()->routeIs('user.transactions.*') ? 'text-[#10B981] font-bold' : 'text-slate-400' }}">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                <span class="text-[10px] mt-1">Transaksi</span>
+            <a href="{{ route('user.transactions.index') }}" class="flex flex-col items-center justify-center w-14 py-1 {{ request()->routeIs('user.transactions.*') ? 'text-[#818CF8] font-bold' : 'text-slate-400' }}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                <span class="text-[10px] mt-1">Income/Exp</span>
             </a>
 
             <!-- Mobile Center Floating Action Button -->
-            <button @click="openSideSheet = true" class="w-13 h-13 rounded-full bg-gradient-to-br from-[#059669] to-[#047857] text-white flex items-center justify-center shadow-lg shadow-[#059669]/40 hover:scale-105 active:scale-95 -mt-5 border-4 border-[#0B132B]">
+            <button @click="openSideSheet = true" class="w-13 h-13 rounded-full bg-gradient-to-br from-[#059669] to-[#047857] text-white flex items-center justify-center shadow-lg shadow-[#059669]/40 hover:scale-105 active:scale-95 -mt-5 border-4 border-[#0F172A]">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             </button>
 
-            <a href="{{ route('user.budget.index') }}" class="flex flex-col items-center justify-center w-14 py-1 {{ request()->routeIs('user.budget.*') ? 'text-[#10B981] font-bold' : 'text-slate-400' }}">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/><circle cx="8" cy="12" r="2"/><circle cx="16" cy="6" r="2"/><circle cx="12" cy="18" r="2"/></svg>
-                <span class="text-[10px] mt-1">Anggaran</span>
+            <a href="{{ route('user.master-data.index') }}" class="flex flex-col items-center justify-center w-14 py-1 {{ request()->routeIs('user.master-data.*') || request()->routeIs('user.categories.*') || request()->routeIs('user.accounts.*') ? 'text-[#818CF8] font-bold' : 'text-slate-400' }}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+                <span class="text-[10px] mt-1">Master</span>
             </a>
 
             <button @click="openMobileMenu = true" class="flex flex-col items-center justify-center w-14 py-1 text-slate-400">
@@ -372,38 +410,23 @@
         </div>
 
         <!-- MOBILE MENU BOTTOM SHEET -->
-        <div x-show="openMobileMenu" x-cloak class="fixed inset-0 z-50 flex items-end bg-[#090D16]/60 backdrop-blur-xs md:hidden">
+        <div x-show="openMobileMenu" x-cloak class="fixed inset-0 z-50 flex items-end bg-[#0F172A]/60 backdrop-blur-xs md:hidden">
             <div @click.away="openMobileMenu = false" class="bg-white rounded-t-3xl w-full p-6 space-y-4">
                 <div class="w-12 h-1.5 bg-[#E2E8F0] rounded-full mx-auto mb-2"></div>
-                <h3 class="text-sm font-bold text-[#0F172A] font-display">Menu Studio Keuangan</h3>
+                <h3 class="text-sm font-bold text-[#0F172A] font-display">Menu System CashMind</h3>
 
                 <div class="grid grid-cols-2 gap-3">
-                    <a href="{{ route('user.accounts.index') }}" class="p-4 rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] flex items-center gap-3">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/></svg>
-                        <span class="text-xs font-bold text-[#0F172A]">Rekening</span>
-                    </a>
-                    <a href="{{ route('user.goals.index') }}" class="p-4 rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] flex items-center gap-3">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-                        <span class="text-xs font-bold text-[#0F172A]">Target</span>
+                    <a href="{{ route('user.reports.index') }}" class="p-4 rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] flex items-center gap-3">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                        <span class="text-xs font-bold text-[#0F172A]">Usage Summary</span>
                     </a>
                     <a href="{{ route('user.reconciliation.index') }}" class="p-4 rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] flex items-center gap-3">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h18"/></svg>
-                        <span class="text-xs font-bold text-[#0F172A]">Rekonsiliasi</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h18"/></svg>
+                        <span class="text-xs font-bold text-[#0F172A]">Missing Budget</span>
                     </a>
-                    <a href="{{ route('user.reports.index') }}" class="p-4 rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] flex items-center gap-3">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
-                        <span class="text-xs font-bold text-[#0F172A]">Laporan</span>
-                    </a>
-                    <a href="{{ route('user.profile.index') }}" class="p-4 rounded-2xl border border-[#A7F3D0] bg-[#ECFDF5] flex items-center gap-3 col-span-2">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                        <div class="truncate">
-                            <span class="text-xs font-bold text-[#0F172A] block leading-tight">Profil Finansial & ML Settings</span>
-                            <span class="text-[10px] text-[#059669] font-medium block">Atur Pendapatan & Jadwal Rekomendasi</span>
-                        </div>
-                    </a>
-                    <a href="{{ route('user.categories.index') }}" class="p-4 rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] flex items-center gap-3 col-span-2">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5 4 4"/><path d="M13 2 3 12v7a2 2 0 0 0 2 2h7l10-10V4a2 2 0 0 0-2-2z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>
-                        <span class="text-xs font-bold text-[#0F172A]">Kategori Keuangan</span>
+                    <a href="{{ route('user.profile.index') }}" class="p-4 rounded-2xl border border-[#C7D2FE] bg-[#EEF2FF] flex items-center gap-3">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        <span class="text-xs font-bold text-[#0F172A]">Profil Saya</span>
                     </a>
                 </div>
 
@@ -412,14 +435,14 @@
         </div>
 
         <!-- FORM SIDE SHEET DESKTOP & FULL SCREEN SHEET MOBILE -->
-        <div x-show="openSideSheet" x-cloak class="fixed inset-0 z-50 flex justify-end bg-[#090D16]/60 backdrop-blur-xs">
+        <div x-show="openSideSheet" x-cloak class="fixed inset-0 z-50 flex justify-end bg-[#0F172A]/60 backdrop-blur-xs">
             <div @click.away="openSideSheet = false" class="bg-white w-full md:w-[480px] h-full flex flex-col justify-between shadow-2xl overflow-y-auto">
                 
                 <!-- Side Sheet Header -->
-                <div class="h-[72px] px-6 bg-[#0B132B] text-white flex items-center justify-between sticky top-0 z-10 shadow-md">
+                <div class="h-[72px] px-6 bg-[#0F172A] text-white flex items-center justify-between sticky top-0 z-10 shadow-md">
                     <div>
-                        <h3 class="text-base font-bold font-display">Tambah Transaksi</h3>
-                        <p class="text-[11px] text-slate-300">Catat transaksi pemasukan, pengeluaran, atau transfer.</p>
+                        <h3 class="text-base font-bold font-display">Tambah Transaksi Baru</h3>
+                        <p class="text-[11px] text-slate-300">Catat pemasukan, pengeluaran, atau transfer antar dana.</p>
                     </div>
                     <button @click="openSideSheet = false" class="text-slate-400 hover:text-white">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -432,16 +455,16 @@
                     
                     <!-- Segmented Transaction Type -->
                     <div>
-                        <label class="block text-xs font-bold text-[#344054] mb-2 uppercase tracking-wider">Jenis Transaksi <span class="text-[#E11D48]">*</span></label>
+                        <label class="block text-xs font-bold text-[#344054] mb-2 uppercase tracking-wider">Jenis Transaksi <span class="text-[#EF4444]">*</span></label>
                         <div class="grid grid-cols-3 gap-1 p-1 bg-[#F1F5F9] rounded-2xl border border-[#E2E8F0]">
-                            <button type="button" @click="quickType = 'expense'" :class="quickType === 'expense' ? 'bg-[#E11D48] text-white font-bold shadow-md' : 'text-[#64748B] hover:text-[#0F172A]'" class="py-2.5 px-3 rounded-xl text-xs transition-all">
+                            <button type="button" @click="quickType = 'expense'" :class="quickType === 'expense' ? 'bg-[#EF4444] text-white font-bold shadow-md' : 'text-[#64748B] hover:text-[#0F172A]'" class="py-2.5 px-3 rounded-xl text-xs transition-all">
                                 Pengeluaran
                             </button>
-                            <button type="button" @click="quickType = 'income'" :class="quickType === 'income' ? 'bg-[#059669] text-white font-bold shadow-md' : 'text-[#64748B] hover:text-[#0F172A]'" class="py-2.5 px-3 rounded-xl text-xs transition-all">
+                            <button type="button" @click="quickType = 'income'" :class="quickType === 'income' ? 'bg-[#10B981] text-white font-bold shadow-md' : 'text-[#64748B] hover:text-[#0F172A]'" class="py-2.5 px-3 rounded-xl text-xs transition-all">
                                 Pemasukan
                             </button>
-                            <button type="button" @click="quickType = 'transfer'" :class="quickType === 'transfer' ? 'bg-[#0F172A] text-white font-bold shadow-md' : 'text-[#64748B] hover:text-[#0F172A]'" class="py-2.5 px-3 rounded-xl text-xs transition-all">
-                                Transfer
+                            <button type="button" @click="quickType = 'transfer'" :class="quickType === 'transfer' ? 'bg-[#4F46E5] text-white font-bold shadow-md' : 'text-[#64748B] hover:text-[#0F172A]'" class="py-2.5 px-3 rounded-xl text-xs transition-all">
+                                Transfer Dana
                             </button>
                         </div>
                         <input type="hidden" name="type" :value="quickType">
@@ -449,11 +472,11 @@
 
                     <!-- Nominal Amount -->
                     <div>
-                        <label class="block text-xs font-bold text-[#344054] mb-2 uppercase tracking-wider">Nominal <span class="text-[#E11D48]">*</span></label>
+                        <label class="block text-xs font-bold text-[#344054] mb-2 uppercase tracking-wider">Nominal <span class="text-[#EF4444]">*</span></label>
                         <div class="relative">
                             <input type="text" 
                                    x-model="quickFormattedAmount" 
-                                   @input="formatRupiah($event.target.value)" 
+                                   @input="formatRupiah($event.target.value, 'amount')" 
                                    inputmode="numeric"
                                    placeholder="Rp 0" 
                                    required 
@@ -462,9 +485,24 @@
                         </div>
                     </div>
 
+                    <!-- Admin Fee (For Transfer Dana) -->
+                    <div x-show="quickType === 'transfer'" transition:enter="transition ease-out duration-150" transition:enter-start="opacity-0 translate-y-[-5px]" transition:enter-end="opacity-100 translate-y-0">
+                        <label class="block text-xs font-bold text-[#344054] mb-1.5 uppercase tracking-wider">Biaya Admin Bank/E-Wallet (Opsional)</label>
+                        <div class="relative">
+                            <input type="text" 
+                                   x-model="quickFormattedAdminFee" 
+                                   @input="formatRupiah($event.target.value, 'admin_fee')" 
+                                   inputmode="numeric"
+                                   placeholder="Rp 0 (misal: Rp 6.500 / Rp 2.500)" 
+                                   class="cm-input financial-number border-[#CBD5E1]">
+                            <input type="hidden" name="admin_fee" x-model="quickRawAdminFee">
+                        </div>
+                        <p class="text-[11px] text-[#64748B] mt-1">Biaya admin akan otomatis dicatat sebagai pengeluaran terpisah agar tidak memotong transfer pokok.</p>
+                    </div>
+
                     <!-- Source Account -->
                     <div>
-                        <label class="block text-xs font-bold text-[#344054] mb-1.5 uppercase tracking-wider" x-text="quickType === 'transfer' ? 'Rekening Asal *' : 'Rekening *'"></label>
+                        <label class="block text-xs font-bold text-[#344054] mb-1.5 uppercase tracking-wider" x-text="quickType === 'transfer' ? 'Rekening Sumber *' : 'Rekening *'"></label>
                         <select name="account_id" required class="cm-input">
                             <option value="">Pilih rekening</option>
                             @foreach(Auth::user()->accounts()->where('is_active', true)->get() as $acc)
@@ -475,11 +513,11 @@
 
                     <!-- Destination Account (For Transfer) -->
                     <div x-show="quickType === 'transfer'">
-                        <label class="block text-xs font-bold text-[#344054] mb-1.5 uppercase tracking-wider">Rekening Tujuan <span class="text-[#E11D48]">*</span></label>
+                        <label class="block text-xs font-bold text-[#344054] mb-1.5 uppercase tracking-wider">Rekening / Dompet Tujuan <span class="text-[#EF4444]">*</span></label>
                         <select name="destination_account_id" class="cm-input">
-                            <option value="">Pilih rekening tujuan</option>
+                            <option value="">Pilih rekening/dompet tujuan (atau Tabungan)</option>
                             @foreach(Auth::user()->accounts()->where('is_active', true)->get() as $acc)
-                                <option value="{{ $acc->id }}">{{ $acc->name }} (Rp {{ number_format($acc->balance, 0, ',', '.') }})</option>
+                                <option value="{{ $acc->id }}">{{ $acc->name }} ({{ $acc->account_category === 'savings' ? 'Tabungan' : strtoupper($acc->type) }})</option>
                             @endforeach
                         </select>
                     </div>
@@ -491,7 +529,7 @@
                             <option value="">Pilih kategori</option>
                             @php
                                 $disabledCatIds = \App\Models\UserCategoryToggle::where('user_id', Auth::id())->where('is_active', false)->pluck('category_id')->toArray();
-                                $activeCats = Auth::user()->categories()->get()->concat(\App\Models\Category::where('is_system', true)->whereNotIn('id', $disabledCatIds)->get());
+                                $activeCats = Auth::user()->categories()->where('is_active', true)->get()->concat(\App\Models\Category::where('is_system', true)->where('is_active', true)->whereNotIn('id', $disabledCatIds)->get());
                             @endphp
                             @foreach($activeCats as $cat)
                                 <option value="{{ $cat->id }}" x-show="quickType === '{{ $cat->type }}'">{{ $cat->name }}</option>
@@ -501,20 +539,20 @@
 
                     <!-- Date -->
                     <div>
-                        <label class="block text-xs font-bold text-[#344054] mb-1.5 uppercase tracking-wider">Tanggal <span class="text-[#E11D48]">*</span></label>
+                        <label class="block text-xs font-bold text-[#344054] mb-1.5 uppercase tracking-wider">Tanggal <span class="text-[#EF4444]">*</span></label>
                         <input type="date" name="transaction_date" value="{{ date('Y-m-d') }}" required class="cm-input">
                     </div>
 
                     <!-- Description -->
                     <div>
-                        <label class="block text-xs font-bold text-[#344054] mb-1.5 uppercase tracking-wider">Uraian Transaksi <span class="text-[#E11D48]">*</span></label>
-                        <input type="text" name="description" placeholder="Contoh: Makan siang meeting" required class="cm-input">
+                        <label class="block text-xs font-bold text-[#344054] mb-1.5 uppercase tracking-wider">Uraian / Deskripsi <span class="text-[#EF4444]">*</span></label>
+                        <input type="text" name="description" placeholder="Contoh: Belanja Bulanan / Transfer Tabungan Mandiri" required class="cm-input">
                     </div>
 
                     <!-- Detail Note -->
                     <div>
-                        <label class="block text-xs font-bold text-[#344054] mb-1.5 uppercase tracking-wider">Catatan Detail (Opsional)</label>
-                        <input type="text" name="note" placeholder="Contoh: Pembayaran via QRIS BCA" class="cm-input">
+                        <label class="block text-xs font-bold text-[#344054] mb-1.5 uppercase tracking-wider">Catatan Opsional</label>
+                        <input type="text" name="note" placeholder="Catatan opsional" class="cm-input">
                     </div>
 
                     <!-- Sticky Action Footer -->

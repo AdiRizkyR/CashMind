@@ -14,10 +14,12 @@ class Category extends Model
         'type',
         'icon',
         'is_system',
+        'is_active',
     ];
 
     protected $casts = [
         'is_system' => 'boolean',
+        'is_active' => 'boolean',
     ];
 
     public function user(): BelongsTo

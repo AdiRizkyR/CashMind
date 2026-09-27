@@ -1,342 +1,129 @@
-# CashMind 💰 - Private Personal Financial Management System & ML Budget Advisor
+# CashMind 💰 - Studio Pencatatan & Pengendalian Keuangan Bulanan
 
-![Laravel Version](https://img.shields.io/badge/Laravel-v12.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
-![PHP Version](https://img.shields.io/badge/PHP-v8.2+-777BB4?style=for-the-badge&logo=php&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v3.x-38BDF8?style=for-the-badge&logo=tailwind-css&logoColor=white)
-![Alpine.js](https://img.shields.io/badge/Alpine.js-v3.x-8BC0D0?style=for-the-badge&logo=alpine.js&logoColor=white)
-![Chart.js](https://img.shields.io/badge/Chart.js-v4.x-FF6384?style=for-the-badge&logo=chart.js&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-emerald?style=for-the-badge)
-
-**CashMind** adalah aplikasi pencatatan dan pengelolaan keuangan pribadi modern berbasis **Laravel 12**, **Tailwind CSS**, **Alpine.js**, dan **Chart.js** yang dilengkapi dengan **Machine Learning Budget Advisor Engine** serta menempatkan **Privasi Keuangan Pengguna sebagai prinsip utama**. 
-
-Aplikasi ini mengusung standar tampilan **Studio Finansial Modern** dengan antarmuka yang presisi, responsif, dan elegan. Dilengkapi dengan pengelolaan profil pengguna, rekomendasi alokasi anggaran otomatis berbasis AI/ML, pencatatan transaksi presisi dengan masking rupiah, filter multi-kriteria pada data table, pengelolaan kategori berbasis tab, serta audit rekonsiliasi kas.
+CashMind adalah sistem pencatatan dan pengendalian keuangan berbasis periode bulanan yang dirancang presisi, ringan, dan fokus pada data (*data-first*). Aplikasi ini memberikan kendali mutlak kepada pengguna untuk mengelola arus kas, alokasi anggaran per kategori, pemindahan saldo antar rekening, analisis laporan bulanan, serta pendeteksian selisih saldo finansial.
 
 ---
 
-## 🔒 Prinsip Utama & Batasan Privasi (Privacy First)
+## 🏛️ 5 Menu Utama Sistem
 
-Sistem memisahkan batasan hak akses (*Role Boundary*) secara ketat di tingkat arsitektur backend dan policy:
+Sistem CashMind V2 dibangun secara terstruktur mengacu pada 5 menu utama utama:
 
 ```text
-ADMIN CONSOLE
-HANYA mengelola operasional PLATFORM (Pengguna, Master Data Bank, Feature Flags, Security Audit Logs)
-
-USER WORKSPACE
-HANYA mengelola FINANSIAL PRIBADI (Profil Pengguna, Rekening/Dompet, Transaksi, Budget & AI Advisor, Goals, Rekonsiliasi, Laporan)
+CashMind System Architecture (5 Core Menus)
+├── 1. Dashboard Overview        (/app/dashboard)
+├── 2. Income & Expenses         (/app/income-expenses)
+├── 3. Master Data Referensi     (/app/master-data)
+├── 4. Usage Summary Analisis    (/app/usage-summary)
+└── 5. Missing Budget Selisih    (/app/missing-budget)
 ```
 
-> **Aturan Utama Privasi:** Data keuangan pribadi (saldo, nominal rupiah, detail transaksi, rekening, profil finansial, target, budget, dan laporan) **SEPENUHNYA TERISOLASI** dan **HANYA** dapat diakses oleh pemilik akun tersebut. Admin platform **SAMA SEKALI TIDAK MEMILIKI AKSES** untuk membaca, menginspeksi, ataupun mengekspor data finansial pengguna.
+### 1. 📊 Dashboard Overview (`/app/dashboard`)
+Dashboard berfungsi sebagai ringkasan eksekutif kondisi keuangan pengguna pada bulan dan tahun aktif yang dipilih:
+* **Baris KPI Utama**:
+  * **Saldo Total**: Akumulasi total saldo saat ini yang bersumber dari pencatatan riil.
+  * **Pemasukan Bulan Ini**: Total transaksi pemasukan pada bulan aktif.
+  * **Pengeluaran Bulan Ini**: Total transaksi pengeluaran pada bulan aktif.
+  * **Sisa Budget & Rasio**: Persentase penggunaan anggaran serta sisa alokasi dana.
+* **Breakdown Saldo Media Penyimpanan**: Rincian saldo terpisah untuk **Cash**, **Dompet Digital (E-Wallet)**, dan **Rekening Bank**.
+* **Status Budget per Kategori**: Progress bar per kategori pengeluaran lengkap dengan nominal Alokasi, Realisasi, Sisa Budget, dan Badge Status:
+  * **Aman** (`<80%`): Penggunaan anggaran masih terkendali.
+  * **Waspada** (`80-99%`): Penggunaan anggaran mendekati batas alokasi.
+  * **Melebihi Budget** (`≥100%`): Realisasi pengeluaran melampaui batas anggaran.
+* **Diagram Visual Arus Kas & Tren**: Donut Chart komposisi pengeluaran per kategori serta Bar Chart perbandingan pemasukan vs pengeluaran.
+* **Ringkasan Transfer Dana**: Rekapitulasi aktivitas pemindahan dana internal yang ditampilkan terpisah dari pemasukan/pengeluaran agar nilai laporan tidak terhitung ganda.
 
 ---
 
-## 📋 Daftar Isi
+### 2. 💳 Income & Expenses (`/app/income-expenses`)
+Menu ini mengelola seluruh transaksi bulanan dan dibagi menjadi tiga aktivitas utama:
 
-1. [🎨 Desain Tampilan Studio Finansial Modern & Tipografi](#-desain-tampilan-studio-finansial-modern--tipografi)
-2. [👤 Profil Pengguna & Pengaturan Jadwal Rekomendasi ML](#-profil-pengguna--pengaturan-jadwal-rekomendasi-ml)
-3. [🤖 Machine Learning Budget Advisor Engine](#-machine-learning-budget-advisor-engine)
-4. [💡 Logika Form & Interaktivitas Form](#-logika-form--interaktivitas-form)
-5. [📊 Data Table & Filter Pencarian Multi-Kriteria](#-data-table--filter-pencarian-multi-kriteria)
-6. [🏷️ Pengelolaan Kategori Berbasis Tab & Sakelar Sistem](#️-pengelolaan-kategori-berbasis-tab--sakelar-sistem)
-7. [👑 Admin Console & Promosi Master Data](#-admin-console--promosi-master-data)
-8. [🏗️ Arsitektur & Alur Kerja Sistem](#-arsitektur--alur-kerja-sistem)
-9. [🌟 Modul & Fitur Rinci Aplikasi](#-modul--fitur-rinci-aplikasi)
-10. [🛠️ Teknologi & Dependensi Utilitas](#-teknologi--dependensi-utilitas)
-11. [🗺️ Pemetaan Route & API Endpoints](#️-pemetaan-route--api-endpoints)
-12. [🔐 Akun Demo & Data Seeder](#-akun-demo--data-seeder)
-13. [🚀 Panduan Instalasi & Cara Menjalankan](#-panduan-instalasi--cara-menjalankan)
-14. [📂 Struktur Direktori Project](#-struktur-direktori-project)
+#### A. Tab Income (Pemasukan)
+* Pengguna mencatat transaksi pemasukan memilih kategori aktif dari Master Data.
+* Mencatat tanggal, nominal rupiah, akun penerima, serta deskripsi transaksi.
+* Total pemasukan periode dihitung otomatis dari akumulasi seluruh transaksi *income* bulan aktif.
 
----
+#### B. Tab Expenses (Pengeluaran & Alokasi Budget)
+* Pengguna mengaktifkan kategori pengeluaran dan menetapkan alokasi anggaran menggunakan salah satu dari dua mode:
+  * **Mode Nominal**: Total alokasi nominal batas pengeluaran kategori.
+  * **Mode Persentase**: Alokasi anggaran dihitung berdasarkan persentase dari basis pemasukan bulan tersebut.
+* Setiap transaksi pengeluaran secara otomatis memperbarui realisasi terpakai, sisa alokasi, dan persentase penggunaan kategori.
 
-## 🎨 Desain Tampilan Studio Finansial Modern & Tipografi
-
-CashMind mengusung tampilan **Studio Finansial Modern** yang dirancang khusus untuk memberikan pengalaman visual dan fungsional tingkat tinggi:
-
-* **Dual Typography System**:
-  * **Display Font ('Space Grotesk')**: Font ekspresif dan geometris untuk judul modul, penekanan angka saldo utama, serta kartu ringkasan finansial.
-  * **Body Font ('Manrope')**: Font bersih dan presisi untuk teks navigasi, formulir, serta tabel data angka finansial.
-* **Skema Warna Studio Finansial**:
-  * **Background**: Latar belakang bersih `#F8FAFC` dengan kontras panel solid `#FFFFFF` dan aksen border lembut (`border-slate-200/80`).
-  * **Color Tokens**: Dark Navy (`#0B132B`) sebagai warna primer navigasi & tombol utama, Emerald (`#059669` / `#10B981`) sebagai aksen pemasukan & indikator finansial positif, Rose (`#E11D48`) untuk pengeluaran, dan Amber (`#D97706`) untuk peringatan anggaran.
-* **Autentikasi Terpadu**: Halaman login yang bersih dan intuitif tanpa kerumitan sakelar peran (*role switcher*), memastikan alur masuk yang cepat dan aman.
-* **Arsitektur Navigasi Modern**:
-  * **Desktop Navigation Rail (Compact)**: Navigasi samping ringkas berbasis ikon SVG dengan indikator status aktif.
-  * **Mobile Navigation Bar (Responsive Bottom Bar)**: Navigasi bawah melayang (*fixed bottom bar*) yang nyaman digunakan di perangkat smartphone.
+#### C. Transfer Dana / Pemindahan Saldo
+* Digunakan untuk mencatat perpindahan uang antar media penyimpanan milik sendiri (contoh: BCA → Mandiri, BCA → GoPay, Cash → BCA, atau Rekening Utama → Rekening Tabungan).
+* **Aturan Ledger**: Transfer internal mengurangi saldo sumber dan menambah saldo tujuan dengan nominal yang sama tanpa mengubah Total Income dan tanpa mengubah Total Expenses pengguna.
+* **Biaya Admin Transfer**: Jika terdapat biaya admin (misal Rp6.500 atau Rp2.500), biaya admin secara otomatis dicatat sebagai transaksi Pengeluaran terpisah (*Biaya Admin / Bank Fee*) agar tidak memotong nilai transfer pokok.
+* **Aktivitas Menabung**: Nominal pokok setoran tabungan diperlakukan sebagai Transfer Dana ke rekening tabungan.
 
 ---
 
-## 👤 Profil Pengguna & Pengaturan Jadwal Rekomendasi ML
-
-Menu Profil Pengguna (`/app/profile`) memberikan fasilitas bagi pengguna untuk melengkapi data demografi dan finansial dasar yang menjadi input bagi mesin rekomendasi Machine Learning:
-
-* **Informasi Pendapatan & Tanggungan**: Pengisian gaji bulanan (`monthly_income`) dan jumlah anggota keluarga/tanggungan (`dependents_count`).
-* **Siklus Gajian (`payday_date` & `payday_frequency`)**: Penentuan tanggal spesifik penerimaan gaji dan frekuensi pendapatan (Awal Bulan, Akhir Bulan, atau Tanggal Spesifik).
-* **Profil Risiko & Target Utama**: Pilihan profil risiko finansial (Konservatif, Moderat, Agresif) serta target utama (Menabung, Pelunasan Hutang, Investasi, Dana Darurat).
-* **Frekuensi Rekomendasi ML (`ml_recommendation_schedule`)**: Sakelar opsi jadwal pemberian saran alokasi anggaran:
-  * *Setiap Awal Bulan (Tanggal 1)*
-  * *Saat Gaji Masuk (Sesuai tanggal gajian)*
-  * *Setiap Minggu*
-  * *Manual (Hanya saat diminta oleh pengguna)*
+### 3. 🗂️ Master Data Referensi (`/app/master-data`)
+Master Data menyimpan seluruh referensi yang dapat digunakan kembali pada periode bulanan:
+* **Kategori Income**: Daftar kategori pemasukan (contoh: *Gaji Pokok, Side Job / Freelance, Bonus & THR, Investasi, Saldo Awal*).
+* **Kategori Expenses**: Daftar kategori pengeluaran (contoh: *Makanan & Minuman, Transportasi, Tagihan & Utilitas, Belanja Harian, Hiburan, Kesehatan, Biaya Admin*).
+* **Dompet Digital (E-Wallet)**: Daftar akun e-wallet pengguna (contoh: *GoPay, OVO, DANA, ShopeePay*).
+* **Rekening Bank & Cash**: Daftar rekening bank utama, rekening tabungan, serta kas tunai dompet.
+* **Status Aktif/Nonaktif**: Kategori dan akun menggunakan sistem sakelar Aktif/Nonaktif agar histori transaksi periode lampau tidak rusak ketika referensi sudah tidak lagi digunakan.
 
 ---
 
-## 🤖 Machine Learning Budget Advisor Engine
-
-Di menu Anggaran (`/app/budget`), CashMind menghadirkan **Machine Learning Budget Advisor Engine** yang memberikan saran alokasi dana secara otomatis dan cerdas:
-
-1. **Analisis Komprehensif**: Algoritma `BudgetAdvisorService` mengombinasikan profil finansial pengguna (pendapatan, frekuensi gajian, tanggungan, profil risiko) dengan histori riwayat transaksi pengeluaran selama 60 hari terakhir.
-2. **Kalkulasi Alokasi Kategori**: Mesin menghitung nominal rekomendasi ideal untuk 5 pilar kategori utama (Kebutuhan Pokok, Tabungan & Investasi, Gaya Hidup, Dana Darurat, dan Tagihan & Operasional).
-3. **Penerapan 1-Klik (`Apply AI Recommendation`)**: Pengguna dapat langsung menerapkan seluruh saran alokasi anggaran dari AI ke dalam tabel perencanaan anggaran bulanan hanya dengan menekan satu tombol `Terapkan Alokasi AI`.
-
----
-
-## 💡 Logika Form & Interaktivitas Form
-
-Seluruh form input pada CashMind dirancang dengan logika interaktif yang memudahkan pengisian data:
-
-### 1. 💰 Real-Time Rupiah Currency Masking
-* **Tampilan Input di Layar**: Pengguna mengetik nominal angka dan secara otomatis terformat dengan simbol Rupiah & pemisah ribuan secara *real-time* (contoh: **`Rp 1.000.000`**).
-* **Ekstraksi Data Backend**: Sistem secara otomatis mengekstrak angka murni (contoh: **`1000000`**) ke dalam *hidden input* untuk dikirimkan ke server dan disimpan sebagai format `decimal(15,2)` di MySQL.
-
-### 2. 🔀 Dynamic Category Selector Logic
-* **Mode Pemasukan (Income)**: Pilihan dropdown kategori secara dinamis **HANYA** menampilkan kategori Pemasukan yang aktif.
-* **Mode Pengeluaran (Expense)**: Pilihan dropdown kategori secara dinamis **HANYA** menampilkan kategori Pengeluaran yang aktif.
-* **Mode Transfer**: Pilihan dropdown kategori secara otomatis **DISEMBUNYIKAN**, dan digantikan oleh form **Pilihan Akun Rekening Tujuan**.
-
-### 3. 📝 Pemisahan Input Uraian & Catatan Detail
-* **Uraian Transaksi (`description`)**: Bidang input wajib untuk mencatat **Untuk Apa** transaksi dilakukan (contoh: *"Makan Siang Klien", "Gaji Bulanan", "Bensin Pertamax"*).
-* **Alasan / Catatan Detail (`note`)**: Bidang input opsional untuk mencatat **Mengapa / Alasan** transaksi dilakukan (contoh: *"Untuk negosiasi project baru", "Kebutuhan operasional mingguan"*).
+### 4. 📈 Usage Summary (`/app/usage-summary`)
+Usage Summary menyajikan laporan analisis keuangan bulanan setelah periode berjalan atau selesai:
+* **Ringkasan Evaluasi**: Rekapitulasi pemasukan, pengeluaran, sisa dana, dan tingkat efisiensi penggunaan budget.
+* **Poin Positif**: Identifikasi kategori yang paling hemat, alokasi efektif, atau pengeluaran di bawah anggaran.
+* **Poin Perhatian**: Peringatan kategori yang mendekati/melebihi budget serta dominasi pengeluaran bulanan.
+* **Breakdown Cash vs Transfer**: Tabel pembanding penggunaan media transaksi tunai (Cash) vs nontunai (Bank/QRIS/E-Wallet).
+* **Ekspor Laporan**: Fasilitas ekspor data laporan keuangan bulanan ke format CSV / Spreadsheet.
 
 ---
 
-## 📊 Data Table & Filter Pencarian Multi-Kriteria
-
-Tampilan riwayat transaksi (`/app/transactions`) mengadopsi Data Table modern:
-
-### 1. 🔍 Filter Bar Multi-Kriteria
-Pengguna dapat menyaring data transaksi dengan kombinasi filter berikut:
-* **Pencarian Kata Kunci**: Mencari teks pada uraian transaksi (`description`).
-* **Filter Jenis Transaksi**: Pemasukan, Pengeluaran, Transfer, atau Adjustment.
-* **Filter Akun / Dompet**: Menyaring transaksi berdasarkan akun rekening asal/tujuan.
-* **Filter Kategori Keuangan**: Menyaring transaksi berdasarkan kategori spesifik.
-* **Filter Periode**: Menyaring data berdasarkan bulan dan tahun tertentu.
-
-### 2. 📋 Struktur Data Table & Responsif Mobile
-* **Tampilan Desktop (Table View)**: Data disajikan dalam bentuk Data Table bersih dengan header berlatar `slate-50/80`, font monospaced untuk nominal rupiah, serta tombol aksi cepat hapus.
-* **Tampilan Mobile (Card List View)**: Pada layar *smartphone*, tabel secara otomatis bertransformasi menjadi daftar kartu (*card list*) yang ringkas dan nyaman disentuh.
-* **Empty State Illustratif**: Saat data tidak ditemukan atau belum ada transaksi, sistem menampilkan ilustrasi SVG dan pesan panduan yang ramah.
+### 5. 🔍 Missing Budget (`/app/missing-budget`)
+Missing Budget adalah fitur khusus untuk mendeteksi selisih antara saldo yang secara matematis seharusnya tersisa dengan saldo aktual yang dibawa ke periode berikutnya:
+* **Rumus Perhitungan**:
+  $$\text{Saldo Seharusnya} = \text{Total Pemasukan} - \text{Total Pengeluaran}$$
+  $$\text{Selisih / Missing Budget} = \text{Saldo Seharusnya} - \text{Saldo Aktual Pembanding}$$
+* **Audit Trail**: Menyimpan tanggal audit, periode pembanding, serta sumber saldo awal aktual agar setiap penyesuaian (*adjustment*) dapat ditelusuri secara transparan.
 
 ---
 
-## 🏷️ Pengelolaan Kategori Berbasis Tab & Sakelar Sistem
+## 🔄 Aturan Periode Bulanan & Konsistensi Data
 
-Menu Kategori Keuangan (`/app/categories`) didesain agar pengguna memiliki kontrol penuh atas kategori transaksi mereka:
-
-* **Tab Switcher (Pengeluaran vs Pemasukan)**: Memisahkan kategori pengeluaran dan pemasukan dalam dua tab terisolasi untuk menghindari kebingungan.
-* **Sakelar Kategori Sistem (`Aktifkan` / `Sembunyikan`)**: Pengguna dapat mengaktifkan atau menyembunyikan kategori bawaan sistem. Kategori yang disembunyikan **tidak akan muncul** pada form pencatatan transaksi sehingga tidak ada kategori ganda yang membingungkan.
-* **Kategori Kustom Mandiri**: Pengguna bebas membuat kategori kustom sendiri sesuai dengan penamaan, ikon SVG, dan tipe transaksi yang diinginkan.
+1. **Konteks Periode Global**: Dropdown Bulan dan Tahun pada topbar menjadi pengontrol konteks utama di seluruh menu. Pengeditan transaksi otomatis terikat pada periode aktif.
+2. **Pemicu Otomatis**: Seluruh nominal pada Dashboard dan Usage Summary dihitung otomatis dari transaksi riil, bukan input manual ulang.
+3. **Integritas Transfer**: Transfer dana diproses sebagai satu pasangan transaksi tunggal sehingga proses *edit* atau *delete* selalu memperbarui saldo rekening asal dan tujuan secara konsisten.
 
 ---
 
-## 👑 Admin Console & Promosi Master Data
+## 🎨 Design System & Antarmuka
 
-Modul administrator (`/admin/...`) berfungsi untuk mengelola platform tanpa melanggar privasi pengguna:
+CashMind menerapkan panduan visual finansial modern:
 
-* **Statistik Platform**: Menampilkan total pengguna, pengguna aktif, pengguna baru, serta kesehatan server PHP/Laravel/MySQL.
-* **Manajemen Pengguna**: Mengaktifkan, menonaktifkan (*Suspend*), atau mengirim link reset password pengguna. **TIDAK ADA DATA SALDO/TRANSAKSI PENGGUNA YANG DITAMPILKAN**.
-* **Promosi Saran Pengguna ke Master Data Platform**: Admin dapat melihat daftar nama kategori kustom dan nama bank/e-wallet yang dibuat oleh pengguna (tanpa melihat isi transaksi/saldo). Admin dapat mempromosikannya menjadi **Template Sistem Utama** atau **Master Platform Resmi** hanya dengan satu klik tombol.
-* **Feature Flags Control**: Sakelar terpusat untuk mengaktifkan/menonaktifkan modul tertentu secara *real-time*.
-* **Log Keamanan Audit**: Merekam jejak keamanan autentikasi (`LOGIN_SUCCESS`, `LOGIN_FAILED`, `ACCOUNT_SUSPENDED`).
-
----
-
-## 🏗️ Arsitektur & Alur Kerja Sistem
-
-```mermaid
-flowchart TD
-    A[Pengguna Masuk / Auth] --> B{Pengecekan Role}
-    
-    %% Alur User Workspace
-    B -- Role: User --> C[User Workspace /app]
-    C --> D[Profil Pengguna & Setting ML / Profile]
-    C --> E[Rekening & Dompet / Accounts]
-    C --> F[Riwayat Transaksi / Transactions]
-    C --> G[Anggaran & ML Advisor / Budget]
-    C --> H[Target Keuangan / Goals]
-    C --> I[Rekonsiliasi Saldo / Reconciliation]
-    C --> J[Laporan Keuangan / Reports]
-    C --> K[Kategori Keuangan / Categories]
-    
-    %% Alur Admin Console
-    B -- Role: Admin --> L[Admin Console /admin]
-    L --> M[Ringkasan Sistem / Platform Stats]
-    L --> N[Manajemen Pengguna / User Status]
-    L --> O[Master Data & Promosi Saran]
-    L --> P[Fitur & Modul / Feature Flags]
-    L --> Q[Log Keamanan Audit / Security Logs]
-```
+| Elemen | Spesifikasi / Rekomendasi | Fungsi & Penggunaan |
+| :--- | :--- | :--- |
+| **Tipografi Utama** | Inter (Body) & Plus Jakarta Sans (Display) | Keterbacaan teks dan penekanan angka finansial. |
+| **Format Angka** | `tabular-nums` | Memastikan posisi digit angka lurus dan mudah dibaca pada tabel. |
+| **Warna Primary** | Indigo / Dark Slate (`#0F172A`, `#4F46E5`) | Warna navigasi utama, tombol aksentuasi, dan fokus input. |
+| **Warna Success** | Emerald Green (`#059669`, `#10B981`) | Indikator pemasukan dan status budget aman (`<80%`). |
+| **Warna Warning** | Amber (`#F59E0B`) | Indikator budget mendekati batas (`80-99%`). |
+| **Warna Danger** | Rose Red (`#EF4444`) | Indikator pengeluaran dan status budget melampaui batas (`≥100%`). |
+| **Background** | Slate 50 (`#F8FAFC`) | Latar belakang bersih dengan kontras panel putih solid (`#FFFFFF`). |
+| **Dropdown Selects** | `select.cm-input` & `select.cm-select` | Memiliki padding kanan luas (`2.75rem`) dan SVG arrow kustom agar teks opsi tidak menimpa ikon panah. |
 
 ---
 
-## 🌟 Modul & Fitur Rinci Aplikasi
+## 🗺️ Pemetaan Route Aplikasi
 
-### 1. 🌐 Public Landing Page (`/`)
-* Hero section interaktif dengan jaminan privasi data.
-* Penjelasan 6 fitur utama, 3 alur kerja sederhana, dan FAQ accordion.
-
-### 2. 👤 Workspace User (`/app/...`)
-* **Dashboard Overview**: 4 card ringkasan total saldo, pemasukan, pengeluaran, net cash flow, Chart.js bar chart arus kas 12 bulan, dan donut chart pengeluaran per kategori.
-* **Profil Pengguna (`/app/profile`)**: Form kelola profil finansial, tanggal gajian, jumlah tanggungan, profil risiko, dan pengaturan jadwal rekomendasi ML.
-* **Riwayat Transaksi**: Data table transaksi dengan masking rupiah, filter multi-kriteria, dan input uraian & alasan terpisah.
-* **Rekening & Dompet**: Pengelolaan saldo tunai, bank, e-wallet, dan kalkulasi saldo real-time.
-* **Perencanaan Anggaran & ML Advisor (`/app/budget`)**: Panel rekomendasi alokasi alokasi AI cerdas dengan fitur penerapan 1-klik, serta indikator batas aman/warning/over-budget.
-* **Target Keuangan**: Pelacakan target tabungan jangka panjang dan histori setoran.
-* **Rekonsiliasi Saldo**: Audit saldo kas fisik vs catatan sistem dengan fitur otomatisasi transaksi adjustment.
-* **Laporan Keuangan**: Ringkasan evaluasi arus kas dan ekspor file CSV / cetak PDF.
+| No | URI Path | Route Name | Keterangan Modul |
+| :-: | :--- | :--- | :--- |
+| 1 | `/` | `landing` | Public Landing Page |
+| 2 | `/app/dashboard` | `user.dashboard` | **Menu 1**: Dashboard Overview |
+| 3 | `/app/income-expenses` | `user.transactions.index` | **Menu 2**: Income & Expenses (Tab Income, Expenses, Transfer) |
+| 4 | `/app/master-data` | `user.master-data.index` | **Menu 3**: Master Data (Kategori & Rekening) |
+| 5 | `/app/usage-summary` | `user.reports.index` | **Menu 4**: Usage Summary (Analisis & Laporan) |
+| 6 | `/app/missing-budget` | `user.reconciliation.index` | **Menu 5**: Missing Budget (Deteksi Selisih Saldo) |
+| 7 | `/app/profile` | `user.profile.index` | Profil Finansial & Pengaturan Pengguna |
 
 ---
 
-## 🛠️ Teknologi & Dependensi Utilitas
+## 📄 Hak Cipta & Lisensi
 
-| Layer | Teknologi / Library | Keterangan / Fungsi |
-|---|---|---|
-| **Backend Framework** | Laravel 12 (PHP 8.2+) | MVC, RESTful Routing, Blade Engine, Strict Policy Security |
-| **Machine Learning Engine** | BudgetAdvisorService | Algoritma analitis alokasi dana berdasarkan profil risiko, gaji, & histori transaksi 60 hari |
-| **Database** | MySQL | Relasional Database (`users`, `user_profiles`, `accounts`, `categories`, `transactions`, `budgets`, `goals`, `user_category_toggles`, `reconciliations`, `financial_institutions`, `feature_flags`, `security_logs`) |
-| **Frontend Styling** | Tailwind CSS v3 | Studio Finansial Modern Design System |
-| **Interaktivitas UI** | Alpine.js v3 | State management modal, dropdown, Rp masking, dynamic category selector |
-| **Data Visualization** | Chart.js v4 | Bar Chart Cash Flow & Donut Chart Pengeluaran Kategori |
-| **Typography & Icons** | Space Grotesk & Manrope | Display font Space Grotesk & Body font Manrope dengan 100% Native Inline SVG Icons |
-
----
-
-## 🗺️ Pemetaan Route & API Endpoints
-
-| Method | URI Path | Route Name | Controller Action | Hak Akses |
-|---|---|---|---|---|
-| `GET` | `/` | `landing` | `LandingController@index` | Public |
-| `GET` | `/dashboard` | `dashboard` | `DashboardController@index` | Authenticated (Auto-Route) |
-| `GET` | `/app/dashboard` | `user.dashboard` | `UserDashboardController@index` | `auth`, `role:user`, `active` |
-| `GET` | `/app/profile` | `user.profile.index` | `UserProfileController@index` | `auth`, `role:user`, `active` |
-| `POST` | `/app/profile` | `user.profile.store` | `UserProfileController@store` | `auth`, `role:user`, `active` |
-| `GET` | `/app/transactions` | `user.transactions.index` | `TransactionController@index` | `auth`, `role:user`, `active` |
-| `POST` | `/app/transactions` | `user.transactions.store` | `TransactionController@store` | `auth`, `role:user`, `active` |
-| `DELETE`| `/app/transactions/{id}`| `user.transactions.destroy` | `TransactionController@destroy` | `auth`, `role:user`, `active` |
-| `GET` | `/app/accounts` | `user.accounts.index` | `AccountController@index` | `auth`, `role:user`, `active` |
-| `POST` | `/app/accounts` | `user.accounts.store` | `AccountController@store` | `auth`, `role:user`, `active` |
-| `GET` | `/app/budget` | `user.budget.index` | `BudgetController@index` | `auth`, `role:user`, `active` |
-| `POST` | `/app/budget` | `user.budget.store` | `BudgetController@store` | `auth`, `role:user`, `active` |
-| `POST` | `/app/budget/apply-ai` | `user.budget.apply-ai` | `BudgetController@applyAiRecommendation` | `auth`, `role:user`, `active` |
-| `GET` | `/app/categories` | `user.categories.index` | `CategoryController@index` | `auth`, `role:user`, `active` |
-| `POST` | `/app/categories/{id}/toggle-system`| `user.categories.toggle-system`| `CategoryController@toggleSystem`| `auth`, `role:user`, `active` |
-| `GET` | `/app/goals` | `user.goals.index` | `GoalController@index` | `auth`, `role:user`, `active` |
-| `POST` | `/app/goals/{id}/contribute`| `user.goals.contribute` | `GoalController@contribute` | `auth`, `role:user`, `active` |
-| `GET` | `/app/reconciliation` | `user.reconciliation.index`| `ReconciliationController@index`| `auth`, `role:user`, `active` |
-| `POST` | `/app/reconciliation` | `user.reconciliation.store`| `ReconciliationController@store`| `auth`, `role:user`, `active` |
-| `GET` | `/app/reports` | `user.reports.index` | `ReportController@index` | `auth`, `role:user`, `active` |
-| `GET` | `/app/reports/csv` | `user.reports.csv` | `ReportController@exportCsv` | `auth`, `role:user`, `active` |
-| `GET` | `/admin/dashboard` | `admin.dashboard` | `AdminDashboardController@index` | `auth`, `role:admin` |
-| `GET` | `/admin/users` | `admin.users.index` | `UserController@index` | `auth`, `role:admin` |
-| `POST` | `/admin/users/{user}/toggle-status` | `admin.users.toggle-status` | `UserController@toggleStatus` | `auth`, `role:admin` |
-| `GET` | `/admin/master-data` | `admin.master.index` | `MasterDataController@index` | `auth`, `role:admin` |
-| `POST` | `/admin/master-data/promote-category` | `admin.master.category.promote` | `MasterDataController@promoteCategoryTemplate` | `auth`, `role:admin` |
-| `POST` | `/admin/master-data/promote-institution` | `admin.master.institution.promote` | `MasterDataController@promoteInstitution` | `auth`, `role:admin` |
-| `GET` | `/admin/features` | `admin.features.index` | `FeatureController@index` | `auth`, `role:admin` |
-| `GET` | `/admin/logs` | `admin.logs.index` | `SecurityLogController@index` | `auth`, `role:admin` |
-
----
-
-## 🔐 Akun Demo & Data Seeder
-
-| Role | Email | Password | Hak Akses Utama |
-|---|---|---|---|
-| 👑 **Super Admin** | `admin@cashmind.id` | `password` | Platform Operations, User Management, Master Data & Promosi Saran, Feature Flags, Audit Logs (Tanpa Akses Finansial User) |
-| 👤 **Personal User** | `user@cashmind.id` | `password` | Personal Workspace, Profil Finansial, ML Budget Advisor, Kelola Rekening/Dompet, Transactions, Budget Planning, Financial Goals, Rekonsiliasi, Laporan CSV/PDF |
-
----
-
-## 🚀 Panduan Instalasi & Cara Menjalankan
-
-### 1. Prasyarat Sistem
-* PHP versi `>= 8.2`
-* Composer versi `>= 2.x`
-* Database MySQL Server
-* Node.js & NPM
-* Web Browser Modern
-
-### 2. Langkah Instalasi
-
-1. **Clone Repositori Project**:
-   ```bash
-   git clone https://github.com/AdiRizkyR/CashMind.git
-   cd CashMind
-   ```
-
-2. **Install Dependensi Composer & NPM**:
-   ```bash
-   composer install
-   npm install
-   ```
-
-3. **Konfigurasi Environment (`.env`)**:
-   ```bash
-   cp .env.example .env
-   php artisan key:generate
-   ```
-   Sesuaikan baris konfigurasi database MySQL di file `.env` (misal: `DB_DATABASE=cashmind`).
-
-4. **Jalankan Migrasi & Seeder Database**:
-   ```bash
-   php artisan migrate:fresh --seed
-   ```
-
-5. **Build Asset CSS & JS**:
-   ```bash
-   npm run build
-   ```
-
-6. **Jalankan Server Lokal**:
-   ```bash
-   php artisan serve
-   ```
-   Akses aplikasi melalui browser pada alamat: **`http://127.0.0.1:8000`**.
-
----
-
-## 📂 Struktur Direktori Project
-
-```text
-CashMind/
-├── app/
-│   ├── Http/
-│   │   ├── Controllers/
-│   │   │   ├── Admin/             # Controllers Admin Console (Dashboard, Users, MasterData, Features, SecurityLog)
-│   │   │   ├── User/              # Controllers User Workspace (Dashboard, UserProfile, Transactions, Accounts, Budget, Categories, Goals, Reconciliation, Reports)
-│   │   │   ├── DashboardController.php
-│   │   │   └── LandingController.php
-│   │   └── Middleware/            # Middleware Access Control (EnsureRole, EnsureUserIsActive)
-│   ├── Models/                    # Eloquent Models (User, UserProfile, Account, Transaction, Category, UserCategoryToggle, Budget, Goal, Reconciliation, dll.)
-│   ├── Services/                  # Business & ML Logic (BudgetAdvisorService)
-│   └── Policies/                  # FinancialPrivacyPolicy (Strict User Data Isolation)
-├── database/
-│   ├── migrations/                # Schema Migrations (Termasuk 2026_09_21_000004_create_user_profiles_table.php)
-│   └── seeders/                   # Data Seeder Akun Demo, Master Institutions, & Categories
-├── resources/
-│   ├── views/
-│   │   ├── admin/                 # Blade Views Admin Console (100% Bahasa Indonesia)
-│   │   ├── user/                  # Blade Views User Workspace (100% Bahasa Indonesia, User Profile & ML Budget Advisor)
-│   │   ├── layouts/               # Base Layouts (app, user, admin, guest)
-│   │   └── welcome.blade.php      # Public Landing Page
-├── routes/
-│   ├── web.php                    # Routes Web Aplikasi
-│   └── auth.php                   # Routes Autentikasi Breeze
-└── README.md                      # Dokumentasi Resmi Aplikasi CashMind
-```
-
----
-
-## 📄 Lisensi & Hak Cipta
-
-Proyek ini dilisensikan di bawah **[MIT License](LICENSE)**.
-
-Dibuat & Dikembangkan oleh **Adi Rizky Ramadhan** © 2026. Hak Cipta Dilindungi.
+Dikelola dan dikembangkan oleh **Adi Rizky Ramadhan** © 2026. Hak Cipta Dilindungi.

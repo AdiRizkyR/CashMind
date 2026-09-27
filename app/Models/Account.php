@@ -12,6 +12,7 @@ class Account extends Model
         'user_id',
         'name',
         'type',
+        'account_category',
         'institution_id',
         'initial_balance',
         'is_active',

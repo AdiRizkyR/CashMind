@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Budget;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
@@ -12,13 +14,18 @@ class UserDashboardController extends Controller
     {
         $user = $request->user();
 
-        // Month & Year selection
+        // Global Month & Year selection
         $month = (int) $request->get('month', Carbon::now()->month);
         $year = (int) $request->get('year', Carbon::now()->year);
 
         // Accounts list & total balance
         $accounts = $user->accounts()->where('is_active', true)->get();
         $totalBalance = $accounts->sum(fn ($acc) => $acc->balance);
+
+        // Balance breakdown per account type
+        $cashBalance = $accounts->where('type', 'cash')->sum(fn ($acc) => $acc->balance);
+        $ewalletBalance = $accounts->where('type', 'e_wallet')->sum(fn ($acc) => $acc->balance);
+        $bankBalance = $accounts->whereIn('type', ['bank', 'other'])->sum(fn ($acc) => $acc->balance);
 
         // Month Income & Expense
         $monthIncome = (float) $user->transactions()
@@ -34,6 +41,25 @@ class UserDashboardController extends Controller
             ->sum('amount');
 
         $netCashFlow = $monthIncome - $monthExpense;
+        $budgetUsagePercentage = $monthIncome > 0 ? round(($monthExpense / $monthIncome) * 100, 1) : 0;
+
+        // Category Budgets vs Realization Table
+        $budgets = $user->budgets()
+            ->with('category')
+            ->where('period_month', $month)
+            ->where('period_year', $year)
+            ->get();
+
+        // Income per Category
+        $incomeCategoriesSummary = $user->transactions()
+            ->selectRaw('category_id, SUM(amount) as total')
+            ->where('type', 'income')
+            ->whereMonth('transaction_date', $month)
+            ->whereYear('transaction_date', $year)
+            ->whereNotNull('category_id')
+            ->groupBy('category_id')
+            ->with('category')
+            ->get();
 
         // Cash Flow Chart Data (Monthly Income vs Expense for selected year)
         $chartMonths = [];
@@ -42,7 +68,7 @@ class UserDashboardController extends Controller
 
         for ($m = 1; $m <= 12; $m++) {
             $date = Carbon::createFromDate($year, $m, 1);
-            $chartMonths[] = $date->translatedFormat('F');
+            $chartMonths[] = $date->translatedFormat('M');
 
             $inc = (float) $user->transactions()
                 ->where('type', 'income')
@@ -81,6 +107,15 @@ class UserDashboardController extends Controller
             $categoryTotals[] = (float) $item->total;
         }
 
+        // Transfer Dana summary (separate from Income & Expense chart)
+        $monthTransfers = $user->transactions()
+            ->with(['account', 'destinationAccount'])
+            ->where('type', 'transfer')
+            ->whereMonth('transaction_date', $month)
+            ->whereYear('transaction_date', $year)
+            ->orderBy('transaction_date', 'desc')
+            ->get();
+
         // Recent 5 Transactions
         $recentTransactions = $user->transactions()
             ->with(['account', 'destinationAccount', 'category'])
@@ -95,15 +130,22 @@ class UserDashboardController extends Controller
             'year',
             'accounts',
             'totalBalance',
+            'cashBalance',
+            'ewalletBalance',
+            'bankBalance',
             'monthIncome',
             'monthExpense',
             'netCashFlow',
+            'budgetUsagePercentage',
+            'budgets',
+            'incomeCategoriesSummary',
             'chartMonths',
             'incomeSeries',
             'expenseSeries',
             'categoryLabels',
             'categoryTotals',
             'totalExpenseForPercent',
+            'monthTransfers',
             'recentTransactions'
         ));
     }

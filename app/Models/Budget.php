@@ -13,10 +13,13 @@ class Budget extends Model
         'period_month',
         'period_year',
         'amount',
+        'allocation_type',
+        'percentage',
     ];
 
     protected $casts = [
         'amount' => 'decimal:2',
+        'percentage' => 'decimal:2',
         'period_month' => 'integer',
         'period_year' => 'integer',
     ];
@@ -44,27 +47,27 @@ class Budget extends Model
             ->sum('amount');
     }
 
-    public function getPercentageAttribute(): float
+    public function getUsagePercentageAttribute(): float
     {
         if ($this->amount <= 0) {
             return 0;
         }
 
-        return min(100, round(($this->spent / $this->amount) * 100, 1));
+        return round(($this->spent / $this->amount) * 100, 1);
     }
 
     public function getStatusAttribute(): string
     {
         if ($this->amount <= 0) {
-            return 'Safe';
+            return 'Aman';
         }
         $ratio = ($this->spent / $this->amount) * 100;
         if ($ratio < 80) {
-            return 'Safe';
-        } elseif ($ratio <= 100) {
-            return 'Warning';
+            return 'Aman';
+        } elseif ($ratio < 100) {
+            return 'Waspada';
         } else {
-            return 'Exceeded';
+            return 'Melebihi Budget';
         }
     }
 }

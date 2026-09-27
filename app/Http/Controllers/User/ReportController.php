@@ -3,11 +3,19 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Services\FinancialReportAdvisorService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
 class ReportController extends Controller
 {
+    protected FinancialReportAdvisorService $reportAdvisorService;
+
+    public function __construct(FinancialReportAdvisorService $reportAdvisorService)
+    {
+        $this->reportAdvisorService = $reportAdvisorService;
+    }
+
     public function index(Request $request)
     {
         $user = $request->user();
@@ -17,7 +25,11 @@ class ReportController extends Controller
         $accountId = $request->get('account_id');
         $categoryId = $request->get('category_id');
 
-        $query = $user->transactions()->with(['account', 'category']);
+        // Check if selected period is completed
+        $periodDate = Carbon::createFromDate($year, $month, 1)->endOfMonth();
+        $isPeriodCompleted = $periodDate->isPast();
+
+        $query = $user->transactions()->with(['account', 'destinationAccount', 'category']);
 
         if ($month) {
             $query->whereMonth('transaction_date', $month);
@@ -36,9 +48,10 @@ class ReportController extends Controller
 
         $transactions = $query->orderBy('transaction_date', 'asc')->get();
 
-        $totalIncome = $transactions->where('type', 'income')->sum('amount');
-        $totalExpense = $transactions->where('type', 'expense')->sum('amount');
+        $totalIncome = (float) $transactions->where('type', 'income')->sum('amount');
+        $totalExpense = (float) $transactions->where('type', 'expense')->sum('amount');
         $netCashFlow = $totalIncome - $totalExpense;
+        $budgetUsageRate = $totalIncome > 0 ? round(($totalExpense / $totalIncome) * 100, 1) : 0;
 
         $accounts = $user->accounts()->where('is_active', true)->get();
         $categories = $user->categories()->get();
@@ -59,6 +72,20 @@ class ReportController extends Controller
             ];
         });
 
+        // Breakdown by Media: Cash vs Transfer (Bank / E-Wallet)
+        $cashTransactions = $transactions->filter(fn ($t) => optional($t->account)->type === 'cash');
+        $transferTransactions = $transactions->filter(fn ($t) => in_array(optional($t->account)->type, ['bank', 'e_wallet', 'other']));
+
+        $cashIncome = $cashTransactions->where('type', 'income')->sum('amount');
+        $cashExpense = $cashTransactions->where('type', 'expense')->sum('amount');
+
+        $transferIncome = $transferTransactions->where('type', 'income')->sum('amount');
+        $transferExpense = $transferTransactions->where('type', 'expense')->sum('amount');
+        $transferMovement = $transactions->where('type', 'transfer')->sum('amount');
+
+        // Generate Machine Learning Financial Report Analysis
+        $mlAnalysis = $this->reportAdvisorService->generateMonthlyAnalysis($user, $month, $year);
+
         return view('user.reports', compact(
             'month',
             'year',
@@ -70,8 +97,16 @@ class ReportController extends Controller
             'totalIncome',
             'totalExpense',
             'netCashFlow',
+            'budgetUsageRate',
             'incomeBreakdown',
-            'expenseBreakdown'
+            'expenseBreakdown',
+            'cashIncome',
+            'cashExpense',
+            'transferIncome',
+            'transferExpense',
+            'transferMovement',
+            'isPeriodCompleted',
+            'mlAnalysis'
         ));
     }
 
@@ -83,16 +118,16 @@ class ReportController extends Controller
         $year = (int) $request->get('year', Carbon::now()->year);
 
         $transactions = $user->transactions()
-            ->with(['account', 'category'])
+            ->with(['account', 'destinationAccount', 'category'])
             ->whereMonth('transaction_date', $month)
             ->whereYear('transaction_date', $year)
             ->orderBy('transaction_date', 'asc')
             ->get();
 
-        $filename = "laporan_keuangan_{$year}_{$month}.csv";
+        $filename = "cashmind_usage_summary_{$year}_{$month}.csv";
 
         $headers = [
-            'Content-type' => 'text/csv',
+            'Content-type' => 'text/csv; charset=utf-8',
             'Content-Disposition' => "attachment; filename={$filename}",
             'Pragma' => 'no-cache',
             'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
@@ -101,16 +136,20 @@ class ReportController extends Controller
 
         $callback = function () use ($transactions) {
             $file = fopen('php://output', 'w');
-            fputcsv($file, ['Tanggal', 'Jenis', 'Rekening', 'Kategori', 'Uraian', 'Nominal (Rp)']);
+            // UTF-8 BOM for Excel compatibility
+            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+            fputcsv($file, ['Tanggal', 'Jenis', 'Rekening Sumber', 'Rekening Tujuan', 'Kategori', 'Deskripsi / Catatan', 'Nominal (Rp)', 'Biaya Admin (Rp)']);
 
             foreach ($transactions as $t) {
                 fputcsv($file, [
                     $t->transaction_date->format('Y-m-d'),
                     strtoupper($t->type),
                     $t->account?->name ?? '-',
+                    $t->destinationAccount?->name ?? '-',
                     $t->category?->name ?? '-',
-                    $t->description ?? '-',
+                    $t->description ?? $t->note ?? '-',
                     $t->amount,
+                    $t->admin_fee ?? 0,
                 ]);
             }
 
